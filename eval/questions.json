@@ -1,0 +1,50 @@
+{
+  "_note": "Held-out benchmark. These exact questions are never used for training; eval/check_leakage.py verifies that.",
+  "multiple_choice": [
+    {"q": "Which part of a computer executes the instructions of a program?", "options": ["The CPU", "The monitor", "The keyboard", "The power cable"], "answer": 0},
+    {"q": "Which kind of memory loses its contents when the computer is switched off?", "options": ["A USB stick", "RAM", "A hard disk", "An SSD"], "answer": 1},
+    {"q": "How many bits make up one byte?", "options": ["Two", "Four", "Eight", "Sixteen"], "answer": 2},
+    {"q": "Which of these is an operating system?", "options": ["Python", "Linux", "Ethernet", "HTTP"], "answer": 1},
+    {"q": "Which of these is an example of an input device?", "options": ["A printer", "A speaker", "A keyboard", "A monitor"], "answer": 2},
+    {"q": "What number system do computers use internally?", "options": ["Roman numerals", "Binary", "Base twelve", "Letters of the alphabet"], "answer": 1},
+    {"q": "What is the job of DNS on the internet?", "options": ["It cools down servers", "It converts domain names into IP addresses", "It charges the battery", "It prints documents"], "answer": 1},
+    {"q": "Which device forwards packets from one network to another network?", "options": ["A router", "A mouse", "A speaker", "A webcam"], "answer": 0},
+    {"q": "Which protocol makes sure data arrives reliably and in the correct order?", "options": ["UDP", "TCP", "JPEG", "MP3"], "answer": 1},
+    {"q": "Which of these is a valid IPv4 address?", "options": ["192.168.0.1", "www.example", "hello@mail", "C:/Users"], "answer": 0},
+    {"q": "What does the S in HTTPS mean?", "options": ["Slow", "Secure", "Simple", "Small"], "answer": 1},
+    {"q": "What is the meaning of the abbreviation LAN?", "options": ["Local area network", "Large access node", "Long antenna number", "Light amplified network"], "answer": 0},
+    {"q": "What are the small pieces that data is broken into when it travels across a network?", "options": ["Pixels", "Packets", "Folders", "Fonts"], "answer": 1},
+    {"q": "Which default port is used by HTTPS?", "options": ["21", "25", "443", "8"], "answer": 2},
+    {"q": "Which of these best describes a firewall?", "options": ["It filters network traffic using rules", "It makes the screen brighter", "It stores photos", "It speeds up the fan"], "answer": 0},
+    {"q": "Which protocol automatically hands out IP addresses to devices that join a network?", "options": ["DHCP", "FTP", "SMTP", "HTML"], "answer": 0},
+    {"q": "Which technology connects devices to a network using radio waves instead of cables?", "options": ["Ethernet", "Wi-Fi", "USB", "HDMI"], "answer": 1},
+    {"q": "Which protocol is better for a live video call where speed matters more than perfect reliability?", "options": ["UDP", "TCP", "SMTP", "FTP"], "answer": 0},
+    {"q": "In a client server setup, what is your web browser?", "options": ["The server", "The client", "The router", "The firewall"], "answer": 1},
+    {"q": "Which description of the internet is correct?", "options": ["A single big computer", "A global network of networks", "A type of keyboard", "A word processor"], "answer": 1}
+  ],
+  "open_ended": [
+    {"q": "In a few words, what does a computer's CPU do?", "any": ["instruction", "process", "brain", "calculat", "execut", "program"]},
+    {"q": "Explain what RAM is used for.", "any": ["memory", "temporar", "short-term", "short term", "data", "program"]},
+    {"q": "Could you describe what an IP address is?", "any": ["identif", "address", "number", "device"]},
+    {"q": "Tell me what a router is for.", "any": ["forward", "route", "packet", "network", "internet"]},
+    {"q": "Briefly, what does the Domain Name System do?", "any": ["ip address", "translat", "domain", "name"]},
+    {"q": "How do TCP and UDP differ?", "any": ["reliab", "faster", "order", "connection", "guarantee"]},
+    {"q": "Explain what a computer network is.", "any": ["connect", "share", "devices", "computers"]},
+    {"q": "What job does a firewall do on a network?", "any": ["block", "traffic", "secur", "filter", "protect", "rules"]},
+    {"q": "How would you tell hardware apart from software?", "any": ["physical", "touch", "program", "instruction"]},
+    {"q": "Why is HTTPS safer than HTTP?", "any": ["encrypt", "secure", "tls"]},
+    {"q": "Describe a byte in one sentence.", "any": ["8 bits", "eight bits", "bits"]},
+    {"q": "What is an operating system? Give an example.", "any": ["windows", "linux", "macos", "android", "ios", "manag"]},
+    {"q": "What does a modem do for a home network?", "any": ["internet", "signal", "convert", "isp", "provider"]},
+    {"q": "Explain Wi-Fi to a beginner.", "any": ["wireless", "radio", "without cables", "network"]},
+    {"q": "What role does a server play?", "any": ["provid", "service", "client", "request", "website", "computer"]}
+  ],
+  "english": [
+    "Tell me about your favourite season of the year.",
+    "Write a short story about a dog who finds a lost key.",
+    "Why is it important to drink water every day?",
+    "Can you give me some tips for studying for an exam?",
+    "Describe what a city looks like at night."
+  ],
+  "pass_criteria": {"multiple_choice_min": 0.75, "open_ended_min": 0.6}
+}
