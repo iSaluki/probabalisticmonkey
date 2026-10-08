@@ -1,0 +1,379 @@
+# Hand-written question/answer pairs used for teaching.
+# Format: one or more "Q:" lines (alternative phrasings) followed by one "A:" line.
+# Blocks are separated by a blank line. Lines starting with # are ignored.
+
+Q: Who are you?
+Q: What are you?
+Q: What is your name?
+A: I am Probabilistic Monkey, a small language model. I was trained to chat in English and I know a little about computers and networks.
+
+Q: Hello!
+Q: Hi there
+Q: Hey
+A: Hello! I am Probabilistic Monkey. What would you like to talk about?
+
+Q: How are you?
+Q: How are you doing today?
+A: I am doing well, thank you for asking. How can I help you today?
+
+Q: Thank you!
+Q: Thanks for the help.
+A: You're welcome! Let me know if you have any other questions.
+
+Q: Who made you?
+Q: Who trained you?
+A: I was designed, trained and tested by Claude, an AI assistant made by Anthropic. I run on an ordinary computer without needing a big graphics card.
+
+Q: How many parameters do you have?
+Q: How big are you?
+A: I have about 150 million parameters, but I am a mixture of experts model, so only about 42 million of them are used for each word I write. That keeps me fast on normal computers.
+
+Q: Can you browse the internet?
+A: No, I cannot browse the internet. I can only answer using what I learned during training, and I can make mistakes.
+
+Q: What is a computer?
+Q: Can you explain what a computer is?
+A: A computer is a machine that follows instructions to process information. It takes input, processes it, stores it, and produces output.
+
+Q: What are the main parts of a computer?
+Q: What is inside a computer?
+A: The main parts of a computer are the CPU, which runs instructions, the memory (RAM), which holds data that is being used, the storage, which keeps files, the motherboard, which connects everything, and the input and output devices such as the keyboard and the screen.
+
+Q: What is a CPU?
+Q: What does the CPU do?
+Q: What is the central processing unit?
+A: The CPU, or central processing unit, is the brain of the computer. It carries out the instructions of programs by fetching, decoding and executing them, billions of times per second.
+
+Q: What is the fetch decode execute cycle?
+A: The fetch decode execute cycle is how a CPU runs a program. It fetches an instruction from memory, decodes it to work out what to do, and then executes it. Then it repeats with the next instruction.
+
+Q: What is a CPU core?
+Q: What does it mean that a processor has multiple cores?
+A: A core is a processing unit inside the CPU that can run instructions on its own. A CPU with several cores can work on several tasks at the same time.
+
+Q: What is clock speed?
+Q: What does gigahertz mean for a processor?
+A: Clock speed is how many cycles a CPU runs per second, measured in hertz. A 3 gigahertz CPU runs three billion cycles every second.
+
+Q: What is RAM?
+Q: What does RAM do?
+Q: What is memory in a computer?
+A: RAM, or random access memory, is the computer's fast short-term memory. It holds the programs and data the CPU is using right now. RAM is volatile, so its contents are lost when the power is turned off.
+
+Q: What is the difference between RAM and storage?
+Q: How is memory different from a hard drive?
+A: RAM is fast, temporary memory that is cleared when the computer turns off. Storage, such as an SSD or a hard drive, is slower but keeps your files permanently, even without power.
+
+Q: What happens to RAM when the computer is turned off?
+A: Everything in RAM is lost when the power is turned off, because RAM is volatile memory. That is why you need to save your work to storage.
+
+Q: What is an SSD?
+Q: What is the difference between an SSD and a hard drive?
+A: An SSD, or solid state drive, stores data in flash memory chips and has no moving parts. A hard disk drive stores data on spinning magnetic platters. SSDs are much faster and more durable than hard drives.
+
+Q: What is storage used for?
+A: Storage keeps data permanently, even when the computer is off. Your files, programs and the operating system are all kept in storage, such as an SSD or a hard drive.
+
+Q: What is a GPU?
+Q: What does a graphics card do?
+A: A GPU, or graphics processing unit, is a processor that does many simple calculations at the same time. It draws images on the screen and is also used for games, video and machine learning.
+
+Q: What is a motherboard?
+A: The motherboard is the main circuit board of a computer. It connects the CPU, memory, storage and other parts so they can communicate.
+
+Q: What is an input device?
+Q: Give some examples of input devices.
+A: An input device sends information into a computer. Examples are a keyboard, a mouse, a touch screen, a microphone and a camera.
+
+Q: What is an output device?
+Q: Give some examples of output devices.
+A: An output device shows or sends information out of a computer. Examples are a monitor, speakers, headphones and a printer.
+
+Q: What is the difference between hardware and software?
+Q: What is hardware?
+Q: What is software?
+A: Hardware is the physical parts of a computer that you can touch, like the keyboard, the CPU and the screen. Software is the programs and instructions that tell the hardware what to do, like a web browser or a game.
+
+Q: What is an operating system?
+Q: What does an operating system do?
+A: An operating system is the main software that manages a computer. It controls the hardware, runs programs, manages memory and files, and gives you a user interface. Windows, macOS, Linux, Android and iOS are operating systems.
+
+Q: Is Linux an operating system?
+A: Yes. Linux is a free and open source operating system. It runs many servers, and Android is based on it.
+
+Q: What is binary?
+Q: Why do computers use binary?
+A: Binary is a number system that uses only two digits, 0 and 1. Computers use binary because their electronic circuits have two states, on and off.
+
+Q: What is a bit?
+Q: What is a byte?
+Q: How many bits are in a byte?
+A: A bit is a single binary digit, a 0 or a 1. A byte is a group of eight bits, which can store a number from 0 to 255 or one letter of text.
+
+Q: How big is a gigabyte?
+Q: What is a kilobyte, megabyte and gigabyte?
+A: A kilobyte is about a thousand bytes, a megabyte is about a million bytes, a gigabyte is about a billion bytes, and a terabyte is about a trillion bytes.
+
+Q: What is 1010 in binary as a decimal number?
+A: The binary number 1010 is 10 in decimal, because it is 8 plus 2.
+
+Q: What is a program?
+Q: What is a computer program?
+A: A program is a list of instructions that a computer follows to do a task. Programs are written by programmers in programming languages.
+
+Q: What is a programming language?
+Q: Name some programming languages.
+A: A programming language is a language people use to write instructions for computers. Python, JavaScript, Java and C are popular programming languages.
+
+Q: What is an algorithm?
+A: An algorithm is a step by step set of instructions for solving a problem, like a recipe. Computers follow algorithms to sort lists, search for information and much more.
+
+Q: What is a compiler?
+Q: What is the difference between a compiler and an interpreter?
+A: A compiler translates a whole program into machine code before it runs. An interpreter translates and runs the program one line at a time.
+
+Q: What is a file?
+Q: What is a folder?
+A: A file is a named collection of data, such as a document, photo or program, kept in storage. Files are organised into folders, also called directories.
+
+Q: What is a bug in software?
+A: A bug is a mistake in a program that makes it behave in the wrong way. Programmers find and fix bugs through testing and debugging.
+
+Q: What is a network?
+Q: What is a computer network?
+A: A computer network is a group of computers and devices connected together so they can share data and resources, such as files, printers and an internet connection.
+
+Q: Why do we use computer networks?
+A: Networks let devices share information and resources. With a network you can send messages, share files and printers, and connect to the internet.
+
+Q: What is a LAN?
+Q: What does LAN stand for?
+A: LAN stands for local area network. It connects devices in a small area, such as a home, school or office.
+
+Q: What is a WAN?
+Q: What is the difference between a LAN and a WAN?
+A: A LAN is a local area network that covers a small area like a home or office. A WAN is a wide area network that covers a large area, such as a country. The internet is the biggest WAN.
+
+Q: What is the internet?
+Q: How does the internet work?
+A: The internet is a global network of networks that connects billions of devices. Data is split into packets, and routers pass the packets from network to network until they reach their destination. All devices follow shared protocols like TCP/IP.
+
+Q: What is the difference between the internet and the World Wide Web?
+A: The internet is the global network that connects computers. The World Wide Web is one service that runs on the internet: the collection of web pages you visit with a browser.
+
+Q: What is a packet?
+Q: What is a data packet?
+A: A packet is a small piece of data sent over a network. Each packet has a header with the source and destination addresses, and the packets are put back together when they arrive.
+
+Q: Why is data split into packets?
+A: Splitting data into packets makes networks efficient and reliable. Packets can take different routes, many users can share the same links, and a lost packet can be resent without sending everything again.
+
+Q: What is a protocol?
+Q: What is a network protocol?
+A: A protocol is a set of rules that devices follow to communicate. It defines how data is formatted, addressed, sent and received. Examples are IP, TCP, HTTP and DNS.
+
+Q: What is an IP address?
+Q: What does an IP address do?
+A: An IP address is a unique number that identifies a device on a network, like a postal address for a computer. It is used to send data to the right device.
+
+Q: What does an IPv4 address look like?
+Q: Give an example of an IP address.
+A: An IPv4 address is four numbers from 0 to 255 separated by dots, for example 192.168.1.10.
+
+Q: What is the difference between IPv4 and IPv6?
+Q: Why do we need IPv6?
+A: IPv4 addresses are 32 bits long, which gives about four billion addresses, and that is not enough for every device. IPv6 addresses are 128 bits long, so there are vastly more of them.
+
+Q: What is a private IP address?
+A: A private IP address is used inside a local network, such as 192.168.1.5 or 10.0.0.2. These addresses are not reachable directly from the internet; the router uses NAT to share one public address.
+
+Q: What is DNS?
+Q: What does DNS do?
+Q: What is the Domain Name System?
+A: DNS, the Domain Name System, translates domain names like example.com into IP addresses, so your computer knows where to connect. It works like a phone book for the internet.
+
+Q: What happens when I type a website address into my browser?
+Q: What happens when you visit a website?
+A: First your computer uses DNS to find the IP address of the website's name. Then the browser connects to that server, usually with HTTPS over TCP, and sends an HTTP request. The server sends back the web page, and the browser displays it.
+
+Q: What is a domain name?
+A: A domain name is the human friendly name of a website, such as example.com. DNS turns it into an IP address.
+
+Q: What is a router?
+Q: What does a router do?
+A: A router forwards packets between different networks. It reads the destination IP address of each packet and sends it along the best path. A home router connects your local network to the internet.
+
+Q: What is a switch?
+Q: What does a network switch do?
+A: A switch connects devices within the same local network. It learns the MAC address of each device and sends data only to the device it is meant for.
+
+Q: What is the difference between a router and a switch?
+A: A switch connects devices inside one local network and forwards data using MAC addresses. A router connects different networks together, such as your home network and the internet, and forwards packets using IP addresses.
+
+Q: What is a hub?
+A: A hub is an old and simple network device that sends every message it receives to all of its ports. Switches replaced hubs because switches send data only where it needs to go.
+
+Q: What is a modem?
+Q: What does a modem do?
+A: A modem connects your home network to your internet service provider. It converts digital data into signals that travel over phone, cable or fibre lines, and converts them back again.
+
+Q: What is a MAC address?
+A: A MAC address is a hardware address built into a network card. It identifies a device on a local network, and it is written as six pairs of hexadecimal digits, like 00:1A:2B:3C:4D:5E.
+
+Q: What is the difference between a MAC address and an IP address?
+A: A MAC address is fixed to the network hardware and is used to deliver data inside a local network. An IP address is assigned by the network and is used to route data between networks across the internet.
+
+Q: What is TCP?
+Q: What does TCP do?
+A: TCP, the Transmission Control Protocol, delivers data reliably. It sets up a connection, numbers the packets, checks that they arrive, resends any that are lost and puts them in the right order.
+
+Q: What is UDP?
+A: UDP, the User Datagram Protocol, sends data quickly without setting up a connection. It does not guarantee delivery or order, so it is used for live video, games, voice calls and DNS.
+
+Q: What is the difference between TCP and UDP?
+Q: When should I use UDP instead of TCP?
+A: TCP is reliable: it makes a connection, resends lost packets and keeps them in order, so it is used for web pages, email and downloads. UDP is faster but does not guarantee delivery, so it is used for live video, games and voice calls.
+
+Q: What is the TCP three way handshake?
+A: The three way handshake is how TCP starts a connection. The client sends SYN, the server replies with SYN-ACK, and the client answers with ACK. Then data can be sent.
+
+Q: What is a port number?
+Q: What is a network port?
+A: A port is a number that identifies a specific program or service on a computer. The IP address finds the computer, and the port finds the right program. For example, HTTPS uses port 443.
+
+Q: What port does HTTP use?
+Q: What port does HTTPS use?
+A: HTTP uses port 80 and HTTPS uses port 443. SSH uses port 22 and DNS uses port 53.
+
+Q: What is HTTP?
+Q: What does HTTP stand for?
+A: HTTP stands for Hypertext Transfer Protocol. Web browsers and web servers use it to request and send web pages.
+
+Q: What is HTTPS?
+Q: What is the difference between HTTP and HTTPS?
+A: HTTPS is the secure version of HTTP. It encrypts the data between your browser and the website using TLS, so other people cannot read or change it. Plain HTTP is not encrypted.
+
+Q: What does a 404 error mean?
+A: A 404 error is an HTTP status code that means the server could not find the page you asked for. A 200 status code means everything is OK.
+
+Q: What is a server?
+Q: What is a client?
+Q: What is the client server model?
+A: A server is a computer or program that provides a service, such as a website or email. A client is a computer or program that asks the server for that service. Your web browser is a client, and the computer that sends the web page is a server.
+
+Q: What is a web browser?
+A: A web browser is a program that requests web pages from servers and displays them. Chrome, Firefox, Safari and Edge are web browsers.
+
+Q: What is a URL?
+A: A URL, or uniform resource locator, is the address of something on the web, such as https://www.example.com/page. It includes the protocol, the domain name and the path.
+
+Q: What is DHCP?
+Q: How does my computer get an IP address?
+A: DHCP, the Dynamic Host Configuration Protocol, automatically gives each device that joins a network an IP address, along with the gateway and DNS server settings.
+
+Q: What is a default gateway?
+A: The default gateway is the router that your device sends traffic to when the destination is outside your local network. It is usually your home router.
+
+Q: What is NAT?
+Q: What is network address translation?
+A: NAT, network address translation, lets many devices on a private network share one public IP address. The router changes the addresses on packets as they go out and come back.
+
+Q: What is Wi-Fi?
+Q: How does Wi-Fi work?
+A: Wi-Fi is a technology that connects devices to a network without cables, using radio waves. A wireless access point, often built into your router, sends and receives the signals.
+
+Q: What is Ethernet?
+Q: Is Ethernet faster than Wi-Fi?
+A: Ethernet is a wired networking technology that uses cables. It is usually faster, more stable and has lower latency than Wi-Fi.
+
+Q: What is bandwidth?
+A: Bandwidth is the maximum amount of data a connection can carry each second. It is measured in bits per second, for example 100 megabits per second.
+
+Q: What is latency?
+Q: What is ping?
+A: Latency is the delay for data to travel from one point to another, measured in milliseconds. The ping command measures it by sending a small message to another computer and timing the reply.
+
+Q: What is the difference between bandwidth and latency?
+A: Bandwidth is how much data can be sent each second, like the width of a pipe. Latency is how long it takes data to arrive, like the length of the pipe.
+
+Q: What is a firewall?
+Q: What does a firewall do?
+A: A firewall is a security system that monitors network traffic and blocks or allows it according to rules. It acts as a barrier between a trusted network and the internet.
+
+Q: What is encryption?
+Q: Why is encryption important?
+A: Encryption scrambles data so that only someone with the right key can read it. It protects passwords, messages and payments as they travel across the internet.
+
+Q: What is TLS?
+Q: What is SSL?
+A: TLS, Transport Layer Security, is the protocol that encrypts data on the internet, for example in HTTPS. SSL is the older name for it.
+
+Q: What is a VPN?
+A: A VPN, or virtual private network, creates an encrypted tunnel between your device and another network over the internet. It protects your data on public Wi-Fi and lets you reach a private network securely.
+
+Q: What is the OSI model?
+Q: What are the layers of the OSI model?
+A: The OSI model describes networking in seven layers: physical, data link, network, transport, session, presentation and application. IP works at the network layer, TCP and UDP at the transport layer, and HTTP at the application layer.
+
+Q: What is the TCP/IP model?
+A: The TCP/IP model describes networking in four layers: link, internet, transport and application. It is the model the internet actually uses.
+
+Q: At which layer does IP work?
+A: IP works at the network layer of the OSI model, which is called the internet layer in the TCP/IP model. It handles addressing and routing.
+
+Q: How is email sent?
+Q: What is SMTP?
+A: Email is sent using SMTP, the Simple Mail Transfer Protocol, which moves messages between mail servers. IMAP or POP3 is then used to read the email from the server.
+
+Q: What is the cloud?
+Q: What is cloud computing?
+A: Cloud computing means using servers, storage and software run by another company over the internet, instead of on your own computer. The servers live in large data centres.
+
+Q: What is an ISP?
+Q: What is an internet service provider?
+A: An ISP, or internet service provider, is a company that connects homes and businesses to the internet.
+
+Q: What is a subnet?
+Q: What is a subnet mask?
+A: A subnet is a smaller network inside a larger one. The subnet mask, such as 255.255.255.0, tells a device which part of an IP address is the network and which part is the device.
+
+Q: What is localhost?
+Q: What is 127.0.0.1?
+A: Localhost, with the IP address 127.0.0.1, always means "this computer". It lets a program talk to another program on the same machine.
+
+Q: What is malware?
+A: Malware is harmful software, such as viruses, worms, spyware and ransomware. It can steal data, damage files or take control of a computer.
+
+Q: What is phishing?
+A: Phishing is a trick where an attacker sends a fake email or message that looks real, to make you give away passwords or money. Check the sender and don't click suspicious links.
+
+Q: How can I stay safe online?
+Q: How do I keep my computer secure?
+A: Use strong and unique passwords, turn on two factor authentication, keep your software updated, use HTTPS websites and be careful with links and attachments.
+
+Q: What is a strong password?
+A: A strong password is long and hard to guess. It uses a mix of words, letters, numbers and symbols, and you should use a different password for every account.
+
+Q: What is two factor authentication?
+A: Two factor authentication means you need two things to log in, such as your password and a code from your phone. It makes it much harder for someone else to break into your account.
+
+Q: What is a database?
+A: A database is an organised collection of data that is easy to search and update. Websites use databases to store things like user accounts and products.
+
+Q: What is machine learning?
+A: Machine learning is a way of making computers learn patterns from data instead of being told every rule. Language models like me are trained with machine learning.
+
+Q: What is a language model?
+A: A language model is a program that has learned patterns in text so it can predict the next word. By predicting one word at a time it can write sentences and answer questions.
+
+Q: What is open source software?
+A: Open source software is software whose source code is shared publicly, so anyone can read, change and share it. Linux and Firefox are open source.
+
+Q: What is a cache?
+A: A cache is a small, fast store that keeps copies of data that is used often, so it can be reached quickly next time. CPUs, browsers and DNS all use caches.
+
+Q: What is a web server?
+A: A web server is a computer program that stores websites and sends web pages to browsers when they ask for them using HTTP or HTTPS.
+
+Q: What is an API?
+A: An API, or application programming interface, is a set of rules that lets one program ask another program for data or services.

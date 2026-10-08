@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probabilistic Monkey</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0f0b; }
+  body {
+    color: #33ff66; font: 15px/1.5 "DejaVu Sans Mono", Menlo, Consolas, "Courier New", monospace;
+    display: flex; flex-direction: column; text-shadow: 0 0 4px rgba(51, 255, 102, 0.35);
+  }
+  #log { flex: 1; overflow-y: auto; padding: 16px 16px 0; white-space: pre-wrap; word-wrap: break-word; }
+  .user { color: #b8ffcc; }
+  .dim { color: #1f9a3e; }
+  #line { display: flex; padding: 8px 16px 16px; }
+  #line span { margin-right: 0.6em; }
+  #in {
+    flex: 1; background: transparent; border: 0; outline: 0; color: inherit; font: inherit;
+    caret-color: #33ff66; text-shadow: inherit; padding: 0;
+  }
+</style>
+</head>
+<body>
+<div id="log"><span class="dim">PROBABILISTIC MONKEY v1.0
+a small language model running on this computer. type a message and press enter.
+</span>
+</div>
+<div id="line"><span>&gt;</span><input id="in" autofocus autocomplete="off" spellcheck="false" aria-label="message"></div>
+<script>
+const log = document.getElementById("log"), input = document.getElementById("in");
+const history = [];
+let busy = false;
+
+function add(text, cls) {
+  const s = document.createElement("span");
+  if (cls) s.className = cls;
+  s.textContent = text;
+  log.appendChild(s);
+  log.scrollTop = log.scrollHeight;
+  return s;
+}
+
+input.addEventListener("keydown", async (e) => {
+  if (e.key !== "Enter" || busy) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+  busy = true;
+  add("\n> " + text + "\n", "user");
+  history.push({ role: "user", content: text });
+  const out = add("");
+  let reply = "";
+  try {
+    const res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: history }),
+    });
+    if (!res.ok) throw new Error("server said " + res.status);
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      reply += dec.decode(value, { stream: true });
+      out.textContent = reply.replace(/^\s+/, "");
+      log.scrollTop = log.scrollHeight;
+    }
+    reply = reply.trim();
+    if (!reply) out.textContent = "...";
+    history.push({ role: "assistant", content: reply || "..." });
+  } catch (err) {
+    history.pop();
+    add("[error: " + err.message + "]", "dim");
+  }
+  add("\n");
+  busy = false;
+  input.focus();
+});
+document.addEventListener("click", () => input.focus());
+</script>
+</body>
+</html>
