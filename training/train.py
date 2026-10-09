@@ -25,8 +25,8 @@ SEQ = 512
 def get_args():
     p = argparse.ArgumentParser()
     p.add_argument("phase", choices=["pretrain", "sft"])
-    p.add_argument("--micro_batch", type=int, default=16)
-    p.add_argument("--accum", type=int, default=2)
+    p.add_argument("--micro_batch", type=int, default=32, help="sequences per forward/backward pass")
+    p.add_argument("--accum", type=int, default=2, help="micro-batches per optimiser step")
     p.add_argument("--lr", type=float, default=None)
     p.add_argument("--min_lr_frac", type=float, default=0.05)
     p.add_argument("--total_steps", type=int, default=None)
@@ -39,7 +39,7 @@ def get_args():
     a = p.parse_args()
     if a.phase == "pretrain":
         a.lr = a.lr or 1.5e-3
-        a.total_steps = a.total_steps or 30000
+        a.total_steps = a.total_steps or 17000  # ~one epoch of the corpus
         a.warmup = a.warmup if a.warmup is not None else 500
     else:
         a.lr = a.lr or 3e-4
@@ -164,9 +164,9 @@ def main():
     os.makedirs(ckdir, exist_ok=True)
     latest = os.path.join(ckdir, "latest.pt")
     B = a.micro_batch * a.accum
-    data = PretrainData(B) if a.phase == "pretrain" else SFTData(B)
+    data = PretrainData(a.micro_batch) if a.phase == "pretrain" else SFTData(a.micro_batch)
     if a.phase == "sft" and a.total_steps is None:
-        a.total_steps = 2 * data.n_chunks // B  # two epochs
+        a.total_steps = data.n_chunks // B  # one epoch
 
     decay, no_decay = [], []
     for n_, p in model.named_parameters():
