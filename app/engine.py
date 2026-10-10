@@ -7,8 +7,13 @@ import glob
 import json
 import os
 
-import numpy as np
-from tokenizers import Tokenizer
+# Decoding multiplies one token at a time by each weight matrix; a single BLAS
+# thread is fastest for that (extra threads only add synchronisation cost).
+for _var in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ.setdefault(_var, "1")
+
+import numpy as np  # noqa: E402
+from tokenizers import Tokenizer  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_MODEL_DIR = os.path.join(os.path.dirname(HERE), "model")
@@ -50,6 +55,7 @@ class Monkey:
         c = self.cfg
         self.L, self.H, self.D = c["n_layers"], c["n_heads"], c["d_model"]
         self.hd = self.D // self.H
+        self.att_scale = float(self.hd) ** -0.5  # a Python float keeps the maths in float32
         self.max_len = c["max_seq_len"]
         inv = 1.0 / (c["rope_theta"] ** (np.arange(0, self.hd, 2, dtype=np.float64) / self.hd))
         freqs = np.outer(np.arange(self.max_len, dtype=np.float64), inv)
@@ -96,7 +102,7 @@ class Monkey:
                 k = np.concatenate([cache["k"][l], k], axis=1)
                 v = np.concatenate([cache["v"][l], v], axis=1)
             cache["k"][l], cache["v"][l] = k, v
-            att = (q @ k.transpose(0, 2, 1)) / np.sqrt(self.hd)
+            att = (q @ k.transpose(0, 2, 1)) * self.att_scale
             S = k.shape[1]
             mask = np.arange(S)[None, :] > (np.arange(T)[:, None] + start)
             att = np.where(mask[None], -1e30, att)
