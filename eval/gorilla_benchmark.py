@@ -1,8 +1,8 @@
-"""Benchmark for Probabilistic Monkey Big (the harder task), run against model_big/.
+"""Benchmark for Probabilistic Gorilla (the harder task), run against model_gorilla/.
 
-    python eval/big_benchmark.py [--model model_big] [--out eval/big_results.md]
+    python eval/gorilla_benchmark.py [--model model_gorilla] [--out eval/gorilla_results.md]
 
-Sections (all questions in eval/big_questions.json, written before training):
+Sections (all questions in eval/gorilla_questions.json, written before training):
   * multiple choice: scored like the small benchmark, by the average
     log-probability of each bare option as the reply (options not shown)
   * troubleshooting: greedy answer must name the likely cause (keywords)
@@ -37,10 +37,10 @@ def quote(text):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", default=os.path.join(REPO, "model_big"))
-    ap.add_argument("--out", default=os.path.join(HERE, "big_results.md"))
+    ap.add_argument("--model", default=os.path.join(REPO, "model_gorilla"))
+    ap.add_argument("--out", default=os.path.join(HERE, "gorilla_results.md"))
     a = ap.parse_args()
-    spec = json.load(open(os.path.join(HERE, "big_questions.json")))
+    spec = json.load(open(os.path.join(HERE, "gorilla_questions.json")))
     m = Monkey(a.model)
     t0 = time.time()
     scores, report = {}, []
@@ -126,7 +126,7 @@ def main():
         passed &= good
         summary.append(f"| {k.replace('_', ' ')} | {ok}/{n} ({ok / n:.0%}) | {need:.0%} | {'pass' if good else 'FAIL'} |")
         print(f"{k}: {ok}/{n}", flush=True)
-    head = ["# Probabilistic Monkey Big benchmark results", "",
+    head = ["# Probabilistic Gorilla benchmark results", "",
             "| section | score | required | |", "|---|---|---|---|", *summary, "",
             f"Automatic verdict: **{'PASS' if passed else 'FAIL'}** (English is judged by reading the samples below). "
             f"Runtime {time.time() - t0:.0f}s with the NumPy engine.", ""]

@@ -1,0 +1,5 @@
+# Only the app and the trained models go into the Cloudflare container image
+*
+!app/
+!model/
+!model_gorilla/

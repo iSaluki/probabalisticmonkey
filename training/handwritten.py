@@ -14,15 +14,30 @@ def load_notes():
 
 
 QA_FILES = ("tech_qa.txt", "tech_short.txt")
-# The Big variant also learns step-by-step explanations
-BIG_QA_FILES = QA_FILES + ("tech_processes.txt",)
+# Probabilistic Gorilla also learns step-by-step explanations
+GORILLA_QA_FILES = QA_FILES + ("tech_processes.txt",)
+
+# The hand-written answers are written in Probabilistic Monkey's voice; the
+# Gorilla gets its own name and parameter counts.
+IDENTITY = {
+    "monkey": [],
+    "gorilla": [  # applied in order
+        ("Probabilistic Monkey", "Probabilistic Gorilla"),
+        ("Probabilistic Gorilla, a small language model.",
+         "Probabilistic Gorilla, the bigger sibling of Probabilistic Monkey."),
+        ("I have about 150 million parameters", "I have about 517 million parameters"),
+        ("only about 42 million of them", "only about 75 million of them"),
+    ],
+}
 
 
-def load_qa(files=QA_FILES):
+def load_qa(files=QA_FILES, identity="monkey"):
     """Return a list of (questions, answer) blocks from the given Q/A files."""
     blocks = []
     for name in files:
         blocks += _parse_qa(os.path.join(HANDWRITTEN, name))
+    for old, new in IDENTITY[identity]:
+        blocks = [(qs, a.replace(old, new)) for qs, a in blocks]
     return blocks
 
 
@@ -57,10 +72,10 @@ def vary(q, rng):
     return q
 
 
-def qa_conversations(copies, seed=0, files=QA_FILES):
+def qa_conversations(copies, seed=0, files=QA_FILES, identity="monkey"):
     """Single and multi-turn chat conversations built from the Q/A blocks."""
     rng = random.Random(seed)
-    blocks = load_qa(files)
+    blocks = load_qa(files, identity)
     convs = []
     for _ in range(copies):
         for qs, a in blocks:

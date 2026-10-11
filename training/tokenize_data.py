@@ -14,7 +14,7 @@ import numpy as np
 from tokenizers import Tokenizer
 
 from common import ASSISTANT, CORPUS, END, EOT, MODEL_DIR, TOKENS, USER, VARIANTS, format_chat
-from handwritten import BIG_QA_FILES, load_notes, qa_conversations
+from handwritten import GORILLA_QA_FILES, load_notes, qa_conversations
 
 SEQ = 512
 rng = random.Random(42)
@@ -102,13 +102,13 @@ def build_sft(max_chat=90000, seq=SEQ, out_dir=TOKENS, extra=None, chat_files=("
     print("sft rows", len(rows), "trained tokens %.1fM" % (masks.sum() / 1e6))
 
 
-def build_big():
-    """Probabilistic Monkey Big: all corpora, longer chats, processes and generated skills."""
+def build_gorilla():
+    """Probabilistic Gorilla: all corpora, longer chats, processes and generated skills."""
     import synthetic
-    out_dir = VARIANTS["big"]["tokens"]
-    seq = VARIANTS["big"]["model"]["max_seq_len"]
+    out_dir = VARIANTS["gorilla"]["tokens"]
+    seq = VARIANTS["gorilla"]["model"]["max_seq_len"]
     docs, val = [], []
-    for name in ["cosmopedia.jsonl", "fineweb.jsonl", "cosmopedia_big.jsonl", "fineweb_big.jsonl"]:
+    for name in ["cosmopedia.jsonl", "fineweb.jsonl", "cosmopedia_gorilla.jsonl", "fineweb_gorilla.jsonl"]:
         rows = list(read_jsonl(name))
         rng.shuffle(rows)
         val += [d["text"] for d in rows[:500]]
@@ -117,11 +117,11 @@ def build_big():
         print(name, len(enc), "docs", sum(map(len, enc)) / 1e6, "M tokens", flush=True)
         docs += enc
         del rows, texts
-    chats = [format_chat(d["messages"]) for f in ("chat.jsonl", "chat_big.jsonl") for d in read_jsonl(f)]
+    chats = [format_chat(d["messages"]) for f in ("chat.jsonl", "chat_gorilla.jsonl") for d in read_jsonl(f)]
     enc = encode_many(chats)
     print("chat", len(enc), "docs", sum(map(len, enc)) / 1e6, "M tokens", flush=True)
     docs += enc
-    hand = load_notes() * 40 + [format_chat(c) for c in qa_conversations(25, seed=1, files=BIG_QA_FILES)]
+    hand = load_notes() * 40 + [format_chat(c) for c in qa_conversations(25, seed=1, files=GORILLA_QA_FILES, identity="gorilla")]
     hand += [format_chat(c) for c in synthetic.conversations(150_000, seed=11)]
     enc = encode_many(hand)
     print("handwritten + generated", len(enc), "docs", sum(map(len, enc)) / 1e6, "M tokens", flush=True)
@@ -130,17 +130,17 @@ def build_big():
     arr = np.concatenate(docs)
     arr.tofile(os.path.join(out_dir, "pretrain.bin"))
     np.concatenate(encode_many(val)).tofile(os.path.join(out_dir, "val.bin"))
-    print("big pretrain tokens %.1fM" % (len(arr) / 1e6), flush=True)
+    print("gorilla pretrain tokens %.1fM" % (len(arr) / 1e6), flush=True)
     del docs, arr
-    extra = qa_conversations(12, seed=2, files=BIG_QA_FILES) + synthetic.conversations(40_000, seed=12)
-    build_sft(max_chat=150_000, seq=seq, out_dir=out_dir, extra=extra, chat_files=("chat.jsonl", "chat_big.jsonl"))
+    extra = qa_conversations(12, seed=2, files=GORILLA_QA_FILES, identity="gorilla") + synthetic.conversations(40_000, seed=12)
+    build_sft(max_chat=150_000, seq=seq, out_dir=out_dir, extra=extra, chat_files=("chat.jsonl", "chat_gorilla.jsonl"))
 
 
 if __name__ == "__main__":
     import sys
     parts = sys.argv[1:] or ["sft", "pretrain"]
-    if "big" in parts:
-        build_big()
+    if "gorilla" in parts:
+        build_gorilla()
     if "sft" in parts:
         build_sft()
     if "pretrain" in parts:

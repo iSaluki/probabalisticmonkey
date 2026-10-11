@@ -1,8 +1,9 @@
-// Cloudflare Worker that serves Probabilistic Monkey from a Cloudflare Container.
+// Cloudflare Worker that serves Probabilistic Monkey and Probabilistic Gorilla from a Cloudflare Container.
 //
-// A Worker isolate cannot hold the model itself (128 MB memory limit), so the
+// A Worker isolate cannot hold the models (128 MB memory limit), so the
 // Worker forwards every request to a container running the same NumPy server
-// as ./run.sh. The container sleeps when idle, so it only costs money while in use.
+// as ./run.sh, including model switching. The container sleeps when idle, so it only
+// costs money while in use.
 import { Container, getContainer } from "@cloudflare/containers";
 
 export class MonkeyContainer extends Container {

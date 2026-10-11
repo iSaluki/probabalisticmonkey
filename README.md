@@ -2,6 +2,8 @@
 
 Probabilistic Monkey is a small chat language model with **152.6 million parameters**. It is trained on English text, with a skew towards technical topics, and runs at chatting speed on an ordinary computer's CPU. No GPU is needed. This repository contains the whole pipeline (data, tokenizer, training, export and evaluation), the trained model, and a deliberately bare terminal-style web page for talking to it.
 
+Its bigger sibling, [Probabilistic Gorilla](#probabilistic-gorilla-in-training) (516.9M parameters), is in training for a harder task. Both live in the same app, which lets you switch between them.
+
 The model, code, data selection, hand-written teaching material and benchmark were all produced, tested and verified by Claude. See [the original brief](#the-original-brief) at the end.
 
 ## Quick start
@@ -15,9 +17,11 @@ cd probabalisticmonkey
 run.bat           # Windows (double-click works too)
 ```
 
-On the first run the launcher creates a virtual environment in `.venv` and installs the two small dependencies, `numpy` and `tokenizers`. It then starts a local server at <http://127.0.0.1:8642> and opens your browser. Type a message and press **Enter**. The whole conversation so far is sent with each message, so the monkey can refer back to earlier turns. There are no other buttons or features. Press Ctrl+C in the terminal to stop.
+On the first run the launcher creates a virtual environment in `.venv` and installs the two small dependencies, `numpy` and `tokenizers`. It then starts a local server at <http://127.0.0.1:8642> and opens your browser. Type a message and press **Enter**. The whole conversation so far is sent with each message, so the model can refer back to earlier turns. Press Ctrl+C in the terminal to stop.
 
-Options: `./run.sh --port 9000`, `./run.sh --no-browser`.
+The top of the page lists the installed models with their parameter counts, and the prompt shows which one you are talking to (`monkey>` or `gorilla>`). To switch, click a model's name or type `/model monkey` or `/model gorilla`; `/models` lists them. The conversation carries over when you switch. There are no other buttons or features.
+
+Options: `./run.sh --port 9000`, `./run.sh --no-browser`, `./run.sh --gorilla` (start with Probabilistic Gorilla selected).
 
 ## What it can and can't do
 
@@ -114,11 +118,11 @@ The English replies are clear and well formed, but the model is weak at keeping 
 
 The full report, with every answer, is in [`eval/results.md`](eval/results.md).
 
-## Probabilistic Monkey Big (in training)
+## Probabilistic Gorilla (in training)
 
-A larger sibling with **516.9M parameters**, of which 74.5M are active per token. It uses the same design, tokenizer and app, and is being trained for a harder job: a technical helper that can troubleshoot simple problems, explain processes step by step, do basic technical calculations and keep track of a conversation.
+Probabilistic Monkey's bigger sibling, with **516.9M parameters**, of which 74.5M are active per token. It uses the same design, tokenizer and app, and is being trained for a harder job: a technical helper that can troubleshoot simple problems, explain processes step by step, do basic technical calculations and keep track of a conversation.
 
-| | Probabilistic Monkey | Big |
+| | Probabilistic Monkey | Probabilistic Gorilla |
 |---|---|---|
 | Parameters (total / active per token) | 152.6M / 42.5M | 516.9M / 74.5M |
 | Layers / width / heads | 10 / 512 / 8 | 12 / 640 / 10 |
@@ -127,7 +131,7 @@ A larger sibling with **516.9M parameters**, of which 74.5M are active per token
 | Pretraining data | ~557M tokens | ~790M tokens, including extra Cosmopedia, FineWeb-Edu and chat shards |
 | Optimiser state | fp32 | bf16 (so it fits in 15 GB of RAM) |
 
-**The harder task.** [`eval/big_questions.json`](eval/big_questions.json) was written before any Big training data. The pass marks are:
+**The harder task.** [`eval/gorilla_questions.json`](eval/gorilla_questions.json) was written before any of the Gorilla's training data. The pass marks are:
 
 | Section | What it tests | Pass mark |
 |---|---|---|
@@ -138,7 +142,7 @@ A larger sibling with **516.9M parameters**, of which 74.5M are active per token
 | Conversation memory (5) | recalling a fact the user gave earlier in the chat | 60% |
 | English | longer writing: a story, an email, an explanation | read by Claude |
 
-For comparison, the small model scores 8/15, 2/8, 2/3, 1/10 and 1/5 on this test, so it fails.
+For comparison, Probabilistic Monkey scores 8/15, 2/8, 2/3, 1/10 and 1/5 on this test, so it fails.
 
 **New teaching data.**
 * `training/data/tech_processes.txt`: hand-written step-by-step explanations.
@@ -148,17 +152,17 @@ For comparison, the small model scores 8/15, 2/8, 2/3, 1/10 and 1/5 on this test
 
 ```bash
 cd training
-python download_data.py --big && python prepare_corpus.py --big && python tokenize_data.py big
-python train.py pretrain --variant big --lr 1e-3 --total_steps 24000
-python train.py sft --variant big && python export.py --variant big
-cd .. && python eval/big_benchmark.py
+python download_data.py --gorilla && python prepare_corpus.py --gorilla && python tokenize_data.py gorilla
+python train.py pretrain --variant gorilla --lr 1e-3 --total_steps 24000
+python train.py sft --variant gorilla && python export.py --variant gorilla
+cd .. && python eval/gorilla_benchmark.py
 ```
 
-On the 4-core CPU used here, pretraining runs at about 1,350 tokens/s, so it takes about a week. When it is finished, `./run.sh --big` will chat with it.
+On the 4-core CPU used here, pretraining runs at about 1,350 tokens/s, so it takes about a week. When it is finished, its weights go in `model_gorilla/` and it appears in the page's model list.
 
 ## Deploying to Cloudflare
 
-A plain Cloudflare Worker cannot hold either model: an isolate is limited to 128 MB of memory, and the weights alone are 150 MB and 520 MB. [`deploy/cloudflare/`](deploy/cloudflare/) instead deploys a Worker in front of a [Cloudflare Container](https://developers.cloudflare.com/containers/) that runs the same server and model. It needs the Workers Paid plan and Docker; then:
+A plain Cloudflare Worker cannot hold either model: an isolate is limited to 128 MB of memory, and the weights alone are 150 MB and 520 MB. [`deploy/cloudflare/`](deploy/cloudflare/) instead deploys a Worker in front of a [Cloudflare Container](https://developers.cloudflare.com/containers/) that runs the same server, page and both models (with switching). It needs the Workers Paid plan and Docker; then:
 
 ```bash
 cd deploy/cloudflare && npm install && npx wrangler login && npm run deploy
@@ -169,10 +173,10 @@ See [`deploy/cloudflare/README.md`](deploy/cloudflare/README.md) for the reasoni
 ## Repository layout
 
 ```
-run.sh / run.bat        one-file launchers (add --big for the Big model)
+run.sh / run.bat        one-file launchers
 app/                    web server, terminal page and NumPy inference engine
 model/                  trained weights (int8), config and tokenizer
-model_big/              Probabilistic Monkey Big (once trained)
+model_gorilla/          Probabilistic Gorilla (once trained)
 training/               the full training pipeline and hand-written teaching data
 eval/                   benchmarks, runners, leakage check and results
 deploy/cloudflare/      Cloudflare Workers + Containers deployment

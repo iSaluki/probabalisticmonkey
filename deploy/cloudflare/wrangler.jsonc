@@ -1,4 +1,5 @@
-// Probabilistic Monkey (152.6M) on Cloudflare Workers + Containers.
+// Probabilistic Monkey (152.6M) and Probabilistic Gorilla (516.9M) on Cloudflare
+// Workers + Containers. The page lets visitors switch between the models.
 // Deploy with:  npx wrangler deploy
 {
   "$schema": "node_modules/wrangler/config-schema.json",
@@ -10,11 +11,10 @@
     {
       "class_name": "MonkeyContainer",
       "image": "./Dockerfile",
-      // build from the repository root so the image can include app/ and model/
+      // build from the repository root so the image can include app/, model/ and model_gorilla/
       "image_build_context": "../..",
-      "image_vars": { "MODEL_DIR": "model" },
-      // 1/2 vCPU and 4 GiB: the model needs ~0.8 GB of RAM and decodes ~30 tokens/s
-      "instance_type": "standard-1",
+      // 1 vCPU and 4 GiB: Monkey needs ~0.8 GB of RAM and Gorilla ~2.3 GB, so both fit at once
+      "instance_type": { "vcpu": 1, "memory_mib": 4096, "disk_mb": 4000 },
       "max_instances": 1
     }
   ],

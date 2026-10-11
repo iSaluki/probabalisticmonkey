@@ -130,13 +130,13 @@ def do_chat(raw=RAW, out_name="chat.jsonl", max_chars=2200):
 
 if __name__ == "__main__":
     import sys
-    if "--big" in sys.argv:
-        # Extra shards for the Big variant (downloaded by download_data.py --big). Chats may be
-        # longer because Big has a 1024-token context.
-        RAW_BIG = RAW + "_big"
-        do_chat(RAW_BIG, "chat_big.jsonl", max_chars=4400)
-        do_cosmopedia(RAW_BIG, "cosmopedia_big.jsonl")
-        do_fineweb(RAW_BIG, "fineweb_big.jsonl")
+    if "--gorilla" in sys.argv:
+        # Extra shards for Probabilistic Gorilla (downloaded by download_data.py --gorilla). Chats may be
+        # longer because Gorilla has a 1024-token context.
+        RAW_GORILLA = RAW + "_gorilla"
+        do_chat(RAW_GORILLA, "chat_gorilla.jsonl", max_chars=4400)
+        do_cosmopedia(RAW_GORILLA, "cosmopedia_gorilla.jsonl")
+        do_fineweb(RAW_GORILLA, "fineweb_gorilla.jsonl")
     else:
         do_chat()
         do_cosmopedia()

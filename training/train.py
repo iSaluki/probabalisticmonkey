@@ -2,7 +2,7 @@
 
   python train.py pretrain     # next-token prediction on the mixed corpus
   python train.py sft          # chat fine-tuning (loss only on assistant replies)
-  add --variant big            # Probabilistic Monkey Big instead of the default small model
+  add --variant gorilla        # Probabilistic Gorilla instead of Probabilistic Monkey
 
 Training is resumable: rerunning the same command continues from the latest
 checkpoint in the variant's checkpoint directory (e.g. $PM_WORK/checkpoints/<phase>/).
@@ -148,7 +148,7 @@ def sample(model, tok, prompt, n=60):
 class AdamWBF16(torch.optim.Optimizer):
     """AdamW that keeps both moment estimates in bfloat16.
 
-    Halves the optimiser's memory (the Big model would not fit in 15 GB of RAM
+    Halves the optimiser's memory (Probabilistic Gorilla would not fit in 15 GB of RAM
     with fp32 moments). The update itself is computed in float32.
     """
 

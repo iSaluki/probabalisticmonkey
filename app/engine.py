@@ -38,6 +38,15 @@ def load_weights(model_dir):
     return w
 
 
+def param_counts(cfg):
+    """(total, active per token) parameter counts for a model config."""
+    d, L, V, E = cfg["d_model"], cfg["n_layers"], cfg["vocab_size"], cfg["n_experts"]
+    h, s = cfg["d_expert"], cfg["d_shared"]
+    per_layer = 2 * d + 4 * d * d + E * d + 3 * E * d * h + 3 * d * s
+    total = V * d + L * per_layer + d
+    return total, total - L * (E - 1) * 3 * d * h
+
+
 def rms_norm(x, weight, eps=1e-5):
     return x / np.sqrt(np.mean(x * x, axis=-1, keepdims=True) + eps) * weight
 

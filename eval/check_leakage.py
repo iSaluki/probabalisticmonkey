@@ -1,6 +1,6 @@
 """Checks that no benchmark question appears in the teaching data written for this project.
 
-Checked: every hand-written file in training/data/ and, for the Big variant,
+Checked: every hand-written file in training/data/ and, for Probabilistic Gorilla,
 the exact generated conversations from training/synthetic.py.
 
 A question that appears verbatim fails the check. A question that shares a run
@@ -30,13 +30,13 @@ def ngrams(text):
     return {" ".join(w[i:i + N]) for i in range(len(w) - N + 1)}
 
 
-def small_questions():
+def monkey_questions():
     spec = json.load(open(os.path.join(HERE, "questions.json")))
     return [i["q"] for i in spec["multiple_choice"] + spec["open_ended"]] + spec["english"]
 
 
-def big_questions():
-    spec = json.load(open(os.path.join(HERE, "big_questions.json")))
+def gorilla_questions():
+    spec = json.load(open(os.path.join(HERE, "gorilla_questions.json")))
     qs = [i["q"] for k in ("multiple_choice", "troubleshooting", "processes", "calculations") for i in spec[k]]
     qs += [t[0] for m in spec["memory"] for t in m["turns"]]
     return qs + spec["english"]
@@ -60,10 +60,10 @@ def check(name, questions, texts):
 
 if __name__ == "__main__":
     hand = [open(os.path.join(DATA, f)).read() for f in sorted(os.listdir(DATA))]
-    ok = check("small benchmark vs hand-written data", small_questions(), hand)
+    ok = check("Monkey benchmark vs hand-written data", monkey_questions(), hand)
     sys.path.insert(0, os.path.join(REPO, "training"))
     import synthetic  # noqa: E402
     generated = [m["content"] for seed, n in ((11, 150_000), (12, 40_000))
                  for c in synthetic.conversations(n, seed=seed) for m in c]
-    ok &= check("Big benchmark vs hand-written + generated data", big_questions(), hand + generated)
+    ok &= check("Gorilla benchmark vs hand-written + generated data", gorilla_questions(), hand + generated)
     sys.exit(0 if ok else 1)

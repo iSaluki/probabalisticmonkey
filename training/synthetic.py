@@ -1,4 +1,4 @@
-"""Procedurally generated teaching conversations for Probabilistic Monkey Big.
+"""Procedurally generated teaching conversations for Probabilistic Gorilla.
 
 Three skills that a small model cannot pick up from ordinary text alone:
   * technical calculations with short worked answers (bits/bytes, binary,
@@ -6,12 +6,12 @@ Three skills that a small model cannot pick up from ordinary text alone:
   * troubleshooting: symptoms -> likely cause -> what to do
   * remembering facts the user stated earlier in the conversation
 
-Values that appear in the Big benchmark (eval/big_questions.json) are excluded
+Values that appear in the Gorilla benchmark (eval/gorilla_questions.json) are excluded
 on purpose, so the benchmark measures whether the model generalises.
 """
 import random
 
-from handwritten import load_qa
+from handwritten import GORILLA_QA_FILES, load_qa
 
 # ---------------------------------------------------------------- calculations
 EXCLUDE = {
@@ -279,7 +279,7 @@ def memory_conversation(rng, qa_blocks):
 def conversations(n, seed=0):
     """n synthetic conversations mixing calculations, troubleshooting and memory."""
     rng = random.Random(seed)
-    qa_blocks = load_qa()
+    qa_blocks = load_qa(GORILLA_QA_FILES, identity="gorilla")
     out = []
     while len(out) < n:
         r = rng.random()

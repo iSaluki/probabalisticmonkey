@@ -1,5 +1,5 @@
 {
-  "_note": "Held-out benchmark for Probabilistic Monkey Big, written before any of its training data. eval/check_leakage.py checks these questions against the hand-written and generated teaching data.",
+  "_note": "Held-out benchmark for Probabilistic Gorilla, written before any of its training data. eval/check_leakage.py checks these questions against the hand-written and generated teaching data.",
   "multiple_choice": [
     {"q": "Which part of a computer executes the instructions of a program?", "options": ["The CPU", "The monitor", "The keyboard", "The power cable"], "answer": 0},
     {"q": "Which kind of memory loses its contents when the computer is switched off?", "options": ["A USB stick", "RAM", "A hard disk", "An SSD"], "answer": 1},

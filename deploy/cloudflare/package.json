@@ -4,7 +4,6 @@
   "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
-    "deploy:big": "wrangler deploy -c wrangler.big.jsonc",
     "dev": "wrangler dev",
     "check": "tsc --noEmit"
   },

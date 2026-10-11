@@ -17,8 +17,8 @@ FILES = [
 ] + [("HuggingFaceTB/smollm-corpus", f"cosmopedia-v2/train-{i:05d}-of-00104.parquet") for i in range(3)] \
   + [("HuggingFaceTB/smollm-corpus", f"fineweb-edu-dedup/train-{i:05d}-of-00234.parquet") for i in range(2)]
 
-# Additional shards used only by the Big variant
-FILES_BIG = [
+# Additional shards used only by Probabilistic Gorilla
+FILES_GORILLA = [
     ("HuggingFaceTB/smol-smoltalk", "data/train-00002-of-00004.parquet"),
     ("HuggingFaceTB/smol-smoltalk", "data/train-00003-of-00004.parquet"),
 ] + [("HuggingFaceTB/smollm-corpus", f"cosmopedia-v2/train-{i:05d}-of-00104.parquet") for i in (3, 4)] \
@@ -26,8 +26,8 @@ FILES_BIG = [
 
 if __name__ == "__main__":
     import sys
-    big = "--big" in sys.argv
-    for repo, f in (FILES_BIG if big else FILES):
+    gorilla = "--gorilla" in sys.argv
+    for repo, f in (FILES_GORILLA if gorilla else FILES):
         p = hf_hub_download(repo, f, repo_type="dataset",
-                            local_dir=os.path.join(RAW + ("_big" if big else ""), repo.split("/")[1]))
+                            local_dir=os.path.join(RAW + ("_gorilla" if gorilla else ""), repo.split("/")[1]))
         print("ok", p, flush=True)
