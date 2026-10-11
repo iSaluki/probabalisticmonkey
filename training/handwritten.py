@@ -13,11 +13,21 @@ def load_notes():
     return [p.strip() for p in parts if p.strip()]
 
 
+QA_FILES = ("tech_qa.txt", "tech_short.txt")
+
+
 def load_qa():
-    """Return a list of (questions, answer) blocks."""
+    """Return a list of (questions, answer) blocks from all Q/A files."""
+    blocks = []
+    for name in QA_FILES:
+        blocks += _parse_qa(os.path.join(HANDWRITTEN, name))
+    return blocks
+
+
+def _parse_qa(path):
     blocks = []
     qs, ans = [], None
-    for line in open(os.path.join(HANDWRITTEN, "tech_qa.txt")):
+    for line in open(path):
         line = line.rstrip("\n")
         if line.startswith("#"):
             continue

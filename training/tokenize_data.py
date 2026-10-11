@@ -103,5 +103,9 @@ def build_sft(max_chat=90000):
 
 
 if __name__ == "__main__":
-    build_sft()
-    build_pretrain()
+    import sys
+    parts = sys.argv[1:] or ["sft", "pretrain"]
+    if "sft" in parts:
+        build_sft()
+    if "pretrain" in parts:
+        build_pretrain()

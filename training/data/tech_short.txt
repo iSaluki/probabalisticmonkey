@@ -1,0 +1,328 @@
+# Short-answer questions, written by Claude to teach concise replies.
+# Same format as tech_qa.txt. They cover the same facts as tech_qa.txt and
+# tech_notes.md (and some general knowledge) but expect a few words, not a paragraph.
+# None of these questions are taken from the benchmark (eval/check_leakage.py checks this).
+
+Q: What is often called the brain of the computer?
+Q: Name the component that runs the programs on a computer.
+A: The CPU.
+
+Q: What does CPU stand for?
+A: Central processing unit.
+
+Q: Where does a computer keep the data it is working on right now?
+Q: What is the fast, temporary working memory of a computer called?
+A: RAM.
+
+Q: Is RAM volatile or non-volatile?
+A: Volatile. It forgets everything when the power goes off.
+
+Q: Does an SSD keep its data without power?
+A: Yes, an SSD is non-volatile storage.
+
+Q: Which is faster, an SSD or a hard disk drive?
+A: An SSD.
+
+Q: Which part of a computer is designed to draw graphics?
+A: The GPU.
+
+Q: What is the main circuit board of a computer called?
+A: The motherboard.
+
+Q: Is a mouse an input device or an output device?
+A: An input device.
+
+Q: Is a monitor an input device or an output device?
+A: An output device.
+
+Q: Are speakers used for input or output?
+A: Output.
+
+Q: Is a microphone used for input or output?
+A: Input.
+
+Q: Is a web browser hardware or software?
+A: Software.
+
+Q: Is a keyboard hardware or software?
+A: Hardware.
+
+Q: Name an operating system.
+A: Linux. Windows, macOS, Android and iOS are other examples.
+
+Q: Is Windows an operating system or a programming language?
+A: An operating system.
+
+Q: Is Python an operating system or a programming language?
+A: A programming language.
+
+Q: Is Ethernet an operating system?
+A: No, Ethernet is a wired networking technology.
+
+Q: What digits does binary use?
+A: Only 0 and 1.
+
+Q: How many values can one byte represent?
+A: 256 values, from 0 to 255.
+
+Q: How many bytes are in a kilobyte, roughly?
+A: About a thousand.
+
+Q: What is a single binary digit called?
+A: A bit.
+
+Q: What is a group of eight bits called?
+A: A byte.
+
+Q: What do we call a step by step method for solving a problem?
+A: An algorithm.
+
+Q: What translates a whole program into machine code before it runs?
+A: A compiler.
+
+Q: What is another word for a folder?
+A: A directory.
+
+Q: What does LAN mean?
+A: Local area network.
+
+Q: What does WAN mean?
+A: Wide area network.
+
+Q: What is the largest wide area network in the world?
+A: The internet.
+
+Q: Is the internet one computer?
+A: No, it is a global network of networks.
+
+Q: What is the internet made of?
+A: Many networks connected together all over the world.
+
+Q: What are the small units of data sent across a network called?
+A: Packets.
+
+Q: What is a set of rules for communication between devices called?
+A: A protocol.
+
+Q: What does IP stand for?
+A: Internet Protocol.
+
+Q: How many numbers are in an IPv4 address?
+A: Four, each from 0 to 255, separated by dots.
+
+Q: Is 10.0.0.1 an IP address?
+A: Yes, it is a private IPv4 address.
+
+Q: Is www.example.com an IP address?
+A: No, it is a domain name. DNS turns it into an IP address.
+
+Q: Is 300.1.2.3 a valid IPv4 address?
+A: No, each number in an IPv4 address must be between 0 and 255.
+
+Q: How long is an IPv6 address?
+A: 128 bits.
+
+Q: What turns a website name into an IP address?
+Q: Which system looks up the IP address for a domain name?
+A: DNS, the Domain Name System.
+
+Q: What does DNS stand for?
+A: Domain Name System.
+
+Q: Which device connects your home network to the internet and forwards packets between networks?
+A: A router.
+
+Q: Which device connects computers inside one local network using MAC addresses?
+A: A switch.
+
+Q: Which device converts digital data into signals for a phone, cable or fibre line?
+A: A modem.
+
+Q: What address is burned into a network card?
+A: A MAC address.
+
+Q: Which protocol is reliable and keeps data in order?
+A: TCP.
+
+Q: Which protocol is faster but does not guarantee delivery?
+A: UDP.
+
+Q: Should online games use TCP or UDP?
+A: Usually UDP, because speed matters more than perfect delivery.
+
+Q: Should a file download use TCP or UDP?
+A: TCP, because every byte must arrive correctly.
+
+Q: What does TCP stand for?
+A: Transmission Control Protocol.
+
+Q: What does UDP stand for?
+A: User Datagram Protocol.
+
+Q: Which port does plain HTTP use by default?
+A: Port 80.
+
+Q: Which port does HTTPS use by default?
+A: Port 443.
+
+Q: Which port does SSH use?
+A: Port 22.
+
+Q: What port number does DNS use?
+A: Port 53.
+
+Q: What does HTTP stand for?
+A: Hypertext Transfer Protocol.
+
+Q: What does the extra S in HTTPS stand for?
+A: Secure.
+
+Q: Does HTTPS encrypt data?
+A: Yes, it encrypts data with TLS.
+
+Q: What status code means a web page was not found?
+A: 404.
+
+Q: What status code means OK?
+A: 200.
+
+Q: When you visit a website, is your computer the client or the server?
+A: The client.
+
+Q: Is the computer that hosts a website the client or the server?
+A: The server.
+
+Q: Which program do you use to view web pages?
+A: A web browser, such as Firefox or Chrome.
+
+Q: Which protocol gives devices their IP addresses automatically?
+A: DHCP.
+
+Q: What does DHCP stand for?
+A: Dynamic Host Configuration Protocol.
+
+Q: What lets many home devices share one public IP address?
+A: NAT, network address translation.
+
+Q: What is the router that leads out of your local network called?
+A: The default gateway.
+
+Q: Does Wi-Fi use cables?
+A: No, Wi-Fi uses radio waves.
+
+Q: Is Ethernet wired or wireless?
+A: Wired.
+
+Q: Which is usually faster and more stable, Ethernet or Wi-Fi?
+A: Ethernet.
+
+Q: What is measured in bits per second?
+A: Bandwidth.
+
+Q: What is measured in milliseconds when you ping a computer?
+A: Latency.
+
+Q: Which command measures the delay to another computer?
+A: Ping.
+
+Q: What blocks or allows network traffic according to rules?
+A: A firewall.
+
+Q: What scrambles data so only the right key can read it?
+A: Encryption.
+
+Q: What creates an encrypted tunnel over the internet?
+A: A VPN.
+
+Q: How many layers does the OSI model have?
+A: Seven.
+
+Q: At which OSI layer does TCP work?
+A: The transport layer.
+
+Q: At which layer does HTTP work?
+A: The application layer.
+
+Q: Which protocol sends email between mail servers?
+A: SMTP.
+
+Q: What is the name for using servers run by another company over the internet?
+A: Cloud computing.
+
+Q: What company connects your home to the internet?
+A: An internet service provider, or ISP.
+
+Q: What is the IP address of localhost?
+A: 127.0.0.1.
+
+Q: What is a common subnet mask for a home network?
+A: 255.255.255.0.
+
+Q: What is a fake email that tries to steal your password called?
+A: Phishing.
+
+Q: What is harmful software called?
+A: Malware.
+
+Q: What extra login step uses a code from your phone?
+A: Two factor authentication.
+
+Q: Should you reuse the same password everywhere?
+A: No. Use a different strong password for each account.
+
+Q: What does URL stand for?
+A: Uniform resource locator.
+
+Q: What does GPU stand for?
+A: Graphics processing unit.
+
+Q: What does RAM stand for?
+A: Random access memory.
+
+Q: What does SSD stand for?
+A: Solid state drive.
+
+Q: What does ISP stand for?
+A: Internet service provider.
+
+Q: What does VPN stand for?
+A: Virtual private network.
+
+Q: What does OS stand for?
+A: Operating system.
+
+Q: What is the capital of France?
+A: Paris.
+
+Q: How many days are in a week?
+A: Seven.
+
+Q: What colour is the sky on a clear day?
+A: Blue.
+
+Q: What is two plus two?
+A: Four.
+
+Q: Which planet do we live on?
+A: Earth.
+
+Q: What do bees make?
+A: Honey.
+
+Q: How many legs does a spider have?
+A: Eight.
+
+Q: What is frozen water called?
+A: Ice.
+
+Q: Which is bigger, the sun or the moon?
+A: The sun.
+
+Q: What language is this conversation in?
+A: English.
+
+Q: Answer in one word: is fire hot or cold?
+A: Hot.
+
+Q: Can fish breathe air like people do?
+A: No, most fish use gills to take oxygen from water.
