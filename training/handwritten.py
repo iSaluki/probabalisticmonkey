@@ -14,12 +14,14 @@ def load_notes():
 
 
 QA_FILES = ("tech_qa.txt", "tech_short.txt")
+# The Big variant also learns step-by-step explanations
+BIG_QA_FILES = QA_FILES + ("tech_processes.txt",)
 
 
-def load_qa():
-    """Return a list of (questions, answer) blocks from all Q/A files."""
+def load_qa(files=QA_FILES):
+    """Return a list of (questions, answer) blocks from the given Q/A files."""
     blocks = []
-    for name in QA_FILES:
+    for name in files:
         blocks += _parse_qa(os.path.join(HANDWRITTEN, name))
     return blocks
 
@@ -55,10 +57,10 @@ def vary(q, rng):
     return q
 
 
-def qa_conversations(copies, seed=0):
+def qa_conversations(copies, seed=0, files=QA_FILES):
     """Single and multi-turn chat conversations built from the Q/A blocks."""
     rng = random.Random(seed)
-    blocks = load_qa()
+    blocks = load_qa(files)
     convs = []
     for _ in range(copies):
         for qs, a in blocks:

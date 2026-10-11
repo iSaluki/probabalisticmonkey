@@ -68,14 +68,16 @@ def main():
     ap.add_argument("--port", type=int, default=8642)
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--no-browser", action="store_true")
+    ap.add_argument("--big", action="store_true", help="use Probabilistic Monkey Big (model_big/)")
+    ap.add_argument("--model", default=None, help="path to a model directory")
     a = ap.parse_args()
-    model_dir = os.path.join(os.path.dirname(HERE), "model")
+    model_dir = a.model or os.path.join(os.path.dirname(HERE), "model_big" if a.big else "model")
     if not os.path.exists(os.path.join(model_dir, "config.json")):
-        print("The trained model was not found in model/ (config.json and weights-*.npz are missing).\n"
-              "Download a release of the repository that includes the model, or train one with the\n"
-              "pipeline in training/ (see README.md).", file=sys.stderr)
+        print(f"The trained model was not found in {model_dir} (config.json and weights-*.npz are missing).\n"
+              "Download a version of the repository that includes it, or train one with the pipeline\n"
+              "in training/ (see README.md).", file=sys.stderr)
         sys.exit(1)
-    print("Loading Probabilistic Monkey...", flush=True)
+    print(f"Loading Probabilistic Monkey{' Big' if a.big else ''}...", flush=True)
     MODEL = Monkey(model_dir)
     server = ThreadingHTTPServer((a.host, a.port), Handler)
     url = f"http://{a.host}:{a.port}/"

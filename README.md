@@ -114,14 +114,68 @@ The English replies are clear and well formed, but the model is weak at keeping 
 
 The full report, with every answer, is in [`eval/results.md`](eval/results.md).
 
+## Probabilistic Monkey Big (in training)
+
+A larger sibling with **516.9M parameters**, of which 74.5M are active per token. It uses the same design, tokenizer and app, and is being trained for a harder job: a technical helper that can troubleshoot simple problems, explain processes step by step, do basic technical calculations and keep track of a conversation.
+
+| | Probabilistic Monkey | Big |
+|---|---|---|
+| Parameters (total / active per token) | 152.6M / 42.5M | 516.9M / 74.5M |
+| Layers / width / heads | 10 / 512 / 8 | 12 / 640 / 10 |
+| Experts per layer | 1 shared + 8 routed | 1 shared + 16 routed |
+| Context window | 512 tokens | 1024 tokens |
+| Pretraining data | ~557M tokens | ~790M tokens, including extra Cosmopedia, FineWeb-Edu and chat shards |
+| Optimiser state | fp32 | bf16 (so it fits in 15 GB of RAM) |
+
+**The harder task.** [`eval/big_questions.json`](eval/big_questions.json) was written before any Big training data. The pass marks are:
+
+| Section | What it tests | Pass mark |
+|---|---|---|
+| Multiple choice (15) | harder computing and networking facts | 80% |
+| Troubleshooting (8) | for example "I can ping 8.8.8.8 but websites won't load" → DNS | 60% |
+| Step-by-step explanations (3) | loading a web page, booting a computer, joining Wi-Fi | 2 of 3 |
+| Calculations (10) | bits and bytes, binary, download times, subnet sizes | 50% |
+| Conversation memory (5) | recalling a fact the user gave earlier in the chat | 60% |
+| English | longer writing: a story, an email, an explanation | read by Claude |
+
+For comparison, the small model scores 8/15, 2/8, 2/3, 1/10 and 1/5 on this test, so it fails.
+
+**New teaching data.**
+* `training/data/tech_processes.txt`: hand-written step-by-step explanations.
+* `training/synthetic.py`: generated practice conversations for calculations (with short worked answers), troubleshooting and conversation memory. The values used in the benchmark are excluded on purpose (for example it never sees a /29 subnet), so the model has to generalise. `eval/check_leakage.py` also checks these exact generated conversations against the benchmark.
+
+**Reproduce:**
+
+```bash
+cd training
+python download_data.py --big && python prepare_corpus.py --big && python tokenize_data.py big
+python train.py pretrain --variant big --lr 1e-3 --total_steps 24000
+python train.py sft --variant big && python export.py --variant big
+cd .. && python eval/big_benchmark.py
+```
+
+On the 4-core CPU used here, pretraining runs at about 1,350 tokens/s, so it takes about a week. When it is finished, `./run.sh --big` will chat with it.
+
+## Deploying to Cloudflare
+
+A plain Cloudflare Worker cannot hold either model: an isolate is limited to 128 MB of memory, and the weights alone are 150 MB and 520 MB. [`deploy/cloudflare/`](deploy/cloudflare/) instead deploys a Worker in front of a [Cloudflare Container](https://developers.cloudflare.com/containers/) that runs the same server and model. It needs the Workers Paid plan and Docker; then:
+
+```bash
+cd deploy/cloudflare && npm install && npx wrangler login && npm run deploy
+```
+
+See [`deploy/cloudflare/README.md`](deploy/cloudflare/README.md) for the reasoning, the configuration, the cost and what was tested.
+
 ## Repository layout
 
 ```
-run.sh / run.bat        one-file launchers
+run.sh / run.bat        one-file launchers (add --big for the Big model)
 app/                    web server, terminal page and NumPy inference engine
 model/                  trained weights (int8), config and tokenizer
+model_big/              Probabilistic Monkey Big (once trained)
 training/               the full training pipeline and hand-written teaching data
-eval/                   benchmark questions, runner, leakage check and results
+eval/                   benchmarks, runners, leakage check and results
+deploy/cloudflare/      Cloudflare Workers + Containers deployment
 ```
 
 ## The original brief

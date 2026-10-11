@@ -43,10 +43,10 @@ def tech_density(text):
     return len(TECH_WORDS.findall(text)) / max(1, len(text) / 1000)
 
 
-def do_cosmopedia():
+def do_cosmopedia(raw=RAW, out_name="cosmopedia.jsonl"):
     n_tech = n_other = tok = 0
-    with open(os.path.join(CORPUS, "cosmopedia.jsonl"), "w") as out:
-        for f in sorted(glob.glob(os.path.join(RAW, "smollm-corpus/cosmopedia-v2/*.parquet"))):
+    with open(os.path.join(CORPUS, out_name), "w") as out:
+        for f in sorted(glob.glob(os.path.join(raw, "smollm-corpus/cosmopedia-v2/*.parquet"))):
             pf = pq.ParquetFile(f)
             for batch in pf.iter_batches(batch_size=4096, columns=["prompt", "text", "audience", "token_length"]):
                 d = batch.to_pydict()
@@ -66,10 +66,10 @@ def do_cosmopedia():
             print(f, "tech", n_tech, "other", n_other, "approx tokens %.0fM" % (tok / 1e6), flush=True)
 
 
-def do_fineweb():
+def do_fineweb(raw=RAW, out_name="fineweb.jsonl"):
     n_tech = n_other = tok = 0
-    with open(os.path.join(CORPUS, "fineweb.jsonl"), "w") as out:
-        for f in sorted(glob.glob(os.path.join(RAW, "smollm-corpus/fineweb-edu-dedup/*.parquet"))):
+    with open(os.path.join(CORPUS, out_name), "w") as out:
+        for f in sorted(glob.glob(os.path.join(raw, "smollm-corpus/fineweb-edu-dedup/*.parquet"))):
             pf = pq.ParquetFile(f)
             for batch in pf.iter_batches(batch_size=4096, columns=["text", "metadata"]):
                 d = batch.to_pydict()
@@ -104,11 +104,11 @@ def norm_messages(msgs):
     return out
 
 
-def do_chat():
+def do_chat(raw=RAW, out_name="chat.jsonl", max_chars=2200):
     n = 0
-    with open(os.path.join(CORPUS, "chat.jsonl"), "w") as out:
-        files = sorted(glob.glob(os.path.join(RAW, "smol-smoltalk/data/train-*.parquet")))
-        files += sorted(glob.glob(os.path.join(RAW, "smoltalk/data/everyday-conversations/train-*.parquet")))
+    with open(os.path.join(CORPUS, out_name), "w") as out:
+        files = sorted(glob.glob(os.path.join(raw, "smol-smoltalk/data/train-*.parquet")))
+        files += sorted(glob.glob(os.path.join(raw, "smoltalk/data/everyday-conversations/train-*.parquet")))
         for f in files:
             for batch in pq.ParquetFile(f).iter_batches(batch_size=4096, columns=["messages"]):
                 for msgs in batch.to_pydict()["messages"]:
@@ -116,7 +116,7 @@ def do_chat():
                     if msgs is None:
                         continue
                     # keep the first exchanges that fit comfortably in the context window
-                    while msgs and len(format_chat(msgs)) > 2200:
+                    while msgs and len(format_chat(msgs)) > max_chars:
                         msgs = msgs[:-2]
                     if not msgs:
                         continue
@@ -129,6 +129,15 @@ def do_chat():
 
 
 if __name__ == "__main__":
-    do_chat()
-    do_cosmopedia()
-    do_fineweb()
+    import sys
+    if "--big" in sys.argv:
+        # Extra shards for the Big variant (downloaded by download_data.py --big). Chats may be
+        # longer because Big has a 1024-token context.
+        RAW_BIG = RAW + "_big"
+        do_chat(RAW_BIG, "chat_big.jsonl", max_chars=4400)
+        do_cosmopedia(RAW_BIG, "cosmopedia_big.jsonl")
+        do_fineweb(RAW_BIG, "fineweb_big.jsonl")
+    else:
+        do_chat()
+        do_cosmopedia()
+        do_fineweb()

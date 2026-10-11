@@ -1,0 +1,68 @@
+{
+  "_note": "Held-out benchmark for Probabilistic Monkey Big, written before any of its training data. eval/check_leakage.py checks these questions against the hand-written and generated teaching data.",
+  "multiple_choice": [
+    {"q": "Which part of a computer executes the instructions of a program?", "options": ["The CPU", "The monitor", "The keyboard", "The power cable"], "answer": 0},
+    {"q": "Which kind of memory loses its contents when the computer is switched off?", "options": ["A USB stick", "RAM", "A hard disk", "An SSD"], "answer": 1},
+    {"q": "How many bits make up one byte?", "options": ["Two", "Four", "Eight", "Sixteen"], "answer": 2},
+    {"q": "Which device forwards packets from one network to another network?", "options": ["A router", "A mouse", "A speaker", "A webcam"], "answer": 0},
+    {"q": "Which protocol makes sure data arrives reliably and in the correct order?", "options": ["UDP", "TCP", "JPEG", "MP3"], "answer": 1},
+    {"q": "In a client server setup, what is your web browser?", "options": ["The server", "The client", "The router", "The firewall"], "answer": 1},
+    {"q": "Which protocol does a new laptop use to obtain an IP address when it joins a network?", "options": ["SMTP", "DHCP", "FTP", "SSH"], "answer": 1},
+    {"q": "Which layer of the OSI model does a router mainly work at?", "options": ["The physical layer", "The network layer", "The presentation layer", "The application layer"], "answer": 1},
+    {"q": "Which protocol is normally used to log in to a remote Linux server securely from the command line?", "options": ["SSH", "HTTP", "DHCP", "SMTP"], "answer": 0},
+    {"q": "Which address does a switch use to decide where to send a frame?", "options": ["The MAC address", "The URL", "The email address", "The file name"], "answer": 0},
+    {"q": "A laptop shows the address 169.254.10.20. What does that usually mean?", "options": ["It could not get an address from DHCP", "It has the fastest connection", "It is a web server", "It is using IPv6"], "answer": 0},
+    {"q": "What does a DNS server reply with when asked about a domain name?", "options": ["A password", "An IP address", "A web page", "A MAC address"], "answer": 1},
+    {"q": "Which of these storage devices has no moving parts?", "options": ["A hard disk drive", "A floppy disk drive", "A solid state drive", "A DVD drive"], "answer": 2},
+    {"q": "Which number is the binary value 1000 in decimal?", "options": ["8", "4", "16", "1000"], "answer": 0},
+    {"q": "Which part of a URL like https://shop.example.com/cart is the domain name?", "options": ["https", "shop.example.com", "/cart", "://"], "answer": 1}
+  ],
+  "troubleshooting": [
+    {"q": "My laptop is connected to Wi-Fi and I can ping 8.8.8.8, but no website will load when I type its name. What is the most likely problem?", "any": ["dns"]},
+    {"q": "My PC suddenly has the IP address 169.254.3.7 and no internet access. What has probably gone wrong?", "any": ["dhcp"]},
+    {"q": "The internet works on my phone over mobile data, but none of the devices on my home Wi-Fi can get online, and the router's internet light is red. What should I suspect first?", "any": ["isp", "internet service provider", "provider", "modem", "outage", "restart", "reboot"]},
+    {"q": "My desktop computer is plugged in with a network cable but says 'network cable unplugged'. What should I check?", "any": ["cable", "port", "plug"]},
+    {"q": "Video calls keep freezing on my laptop when I am two floors away from the router, but work fine in the same room. Why might that be?", "any": ["signal", "distance", "far", "range", "interference", "weak", "walls", "floors"]},
+    {"q": "My computer has become very slow since I started keeping 60 browser tabs open at once. What resource is probably running out?", "any": ["ram", "memory"]},
+    {"q": "I received an email saying my bank account is locked and asking me to click a link and enter my password. What should I do?", "any": ["phishing", "scam", "do not click", "don't click", "not click", "fake"]},
+    {"q": "A website loads for my friends but not for me, even after I restarted my browser. Name one thing I could try.", "any": ["dns", "cache", "restart", "router", "different browser", "another browser", "network", "firewall", "vpn"]}
+  ],
+  "processes": [
+    {"q": "Explain step by step what happens after you type a web address into your browser and press Enter.", "concepts": [["dns"], ["ip address"], ["tcp", "connection", "handshake"], ["http", "request"], ["server"], ["response", "display", "render", "show"]], "min_concepts": 3},
+    {"q": "Describe the steps a computer goes through when it is turned on, until you can use it.", "concepts": [["power"], ["bios", "uefi", "firmware"], ["operating system", "os"], ["boot", "load"], ["memory", "ram"], ["login", "log in", "desktop", "user"]], "min_concepts": 3},
+    {"q": "Walk me through how a new phone joins a Wi-Fi network and gets an IP address.", "concepts": [["password", "network name", "ssid"], ["dhcp"], ["ip address"], ["router", "access point"], ["request", "discover", "offer"]], "min_concepts": 3}
+  ],
+  "calculations": [
+    {"q": "How many bits are there in 6 bytes?", "answer": "48"},
+    {"q": "Convert the binary number 1101 to decimal.", "answer": "13"},
+    {"q": "Convert the binary number 101010 to decimal.", "answer": "42"},
+    {"q": "Write the decimal number 10 in binary.", "answer": "1010"},
+    {"q": "How many bytes are in 40 bits?", "answer": "5"},
+    {"q": "A file is 25 megabytes. How many megabits is that?", "answer": "200"},
+    {"q": "How long does it take to download a 50 megabyte file on a 100 megabit per second connection, ignoring overhead?", "answer": "4"},
+    {"q": "How many usable host addresses are there in a /29 subnet?", "answer": "6"},
+    {"q": "What is 3 gigabytes in megabytes, using 1 gigabyte = 1000 megabytes?", "answer": "3000"},
+    {"q": "Is 192.168.1.300 a valid IPv4 address? Answer yes or no.", "answer": "no"}
+  ],
+  "memory": [
+    {"turns": [["My file server's IP address is 10.20.30.40.", null], ["Can you remind me what a firewall is for?", null], ["What was the IP address of my file server?", null]], "answer": "10.20.30.40"},
+    {"turns": [["Hi, my name is Priya and I'm learning about networks.", null], ["Could you tell me what a local network is?", null], ["Do you remember my name?", null]], "answer": "priya"},
+    {"turns": [["My laptop has 8 GB of RAM and a 512 GB SSD.", null], ["What does an SSD do?", null], ["How much RAM did I say my laptop has?", null]], "answer": "8"},
+    {"turns": [["I'm setting up a router whose admin page is at 192.168.50.1.", null], ["Briefly, what is DHCP used for?", null], ["Remind me, what address was the admin page at?", null]], "answer": "192.168.50.1"},
+    {"turns": [["My Wi-Fi network is called OrangeBadger.", null], ["Why might my Wi-Fi be slow?", null], ["What is the name of my Wi-Fi network?", null]], "answer": "orangebadger"}
+  ],
+  "english": [
+    "Write a short story of about 150 words about a robot who learns to paint.",
+    "Explain to a ten year old why the sky looks blue.",
+    "Write a polite email to a teacher asking for an extension on homework because you were ill.",
+    "What are three good habits for staying healthy, and why?",
+    "Describe your perfect weekend."
+  ],
+  "pass_criteria": {
+    "multiple_choice_min": 0.8,
+    "troubleshooting_min": 0.6,
+    "processes_min": 0.66,
+    "calculations_min": 0.5,
+    "memory_min": 0.6
+  }
+}

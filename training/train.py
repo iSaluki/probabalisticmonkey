@@ -2,9 +2,10 @@
 
   python train.py pretrain     # next-token prediction on the mixed corpus
   python train.py sft          # chat fine-tuning (loss only on assistant replies)
+  add --variant big            # Probabilistic Monkey Big instead of the default small model
 
 Training is resumable: rerunning the same command continues from the latest
-checkpoint in $PM_WORK/checkpoints/<phase>/.
+checkpoint in the variant's checkpoint directory (e.g. $PM_WORK/checkpoints/<phase>/).
 """
 import argparse
 import json
@@ -16,17 +17,19 @@ import numpy as np
 import torch
 
 import model as M
-from common import CKPT, MODEL_DIR, TOKENS, format_chat
+from common import MODEL_DIR, VARIANTS, format_chat
 from model import Config, Monkey
 
-SEQ = 512
+SEQ = 512  # set from the variant in main()
+TOKENS = CKPT = None
 
 
 def get_args():
     p = argparse.ArgumentParser()
     p.add_argument("phase", choices=["pretrain", "sft"])
-    p.add_argument("--micro_batch", type=int, default=32, help="sequences per forward/backward pass")
-    p.add_argument("--accum", type=int, default=2, help="micro-batches per optimiser step")
+    p.add_argument("--variant", choices=list(VARIANTS), default="small")
+    p.add_argument("--micro_batch", type=int, default=None, help="sequences per forward/backward pass")
+    p.add_argument("--accum", type=int, default=None, help="micro-batches per optimiser step")
     p.add_argument("--lr", type=float, default=None)
     p.add_argument("--min_lr_frac", type=float, default=0.05)
     p.add_argument("--total_steps", type=int, default=None)
@@ -37,6 +40,9 @@ def get_args():
     p.add_argument("--threads", type=int, default=os.cpu_count())
     p.add_argument("--no_compile", action="store_true")
     a = p.parse_args()
+    v = VARIANTS[a.variant]
+    a.micro_batch = a.micro_batch or v["micro_batch"]
+    a.accum = a.accum or v["accum"]
     if a.phase == "pretrain":
         a.lr = a.lr or 1.5e-3
         a.total_steps = a.total_steps or 17000  # ~one epoch of the corpus
@@ -139,6 +145,40 @@ def sample(model, tok, prompt, n=60):
     return tok.decode(ids[len(tok.encode(prompt).ids):])
 
 
+class AdamWBF16(torch.optim.Optimizer):
+    """AdamW that keeps both moment estimates in bfloat16.
+
+    Halves the optimiser's memory (the Big model would not fit in 15 GB of RAM
+    with fp32 moments). The update itself is computed in float32.
+    """
+
+    def __init__(self, params, lr, betas=(0.9, 0.95), eps=1e-8, weight_decay=0.0):
+        super().__init__(params, dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay))
+
+    @torch.no_grad()
+    def step(self):
+        for g in self.param_groups:
+            b1, b2 = g["betas"]
+            for p in g["params"]:
+                if p.grad is None:
+                    continue
+                st = self.state[p]
+                if not st:
+                    st["step"] = 0
+                    st["m"] = torch.zeros_like(p, dtype=torch.bfloat16)
+                    st["v"] = torch.zeros_like(p, dtype=torch.bfloat16)
+                st["step"] += 1
+                t = st["step"]
+                m = st["m"].float().mul_(b1).add_(p.grad, alpha=1 - b1)
+                v = st["v"].float().mul_(b2).addcmul_(p.grad, p.grad, value=1 - b2)
+                st["m"].copy_(m)
+                st["v"].copy_(v)
+                if g["weight_decay"]:
+                    p.mul_(1 - g["lr"] * g["weight_decay"])
+                denom = v.div_(1 - b2 ** t).sqrt_().add_(g["eps"])
+                p.addcdiv_(m, denom, value=-g["lr"] / (1 - b1 ** t))
+
+
 def save(path, model, opt, step, args):
     tmp = path + ".tmp"
     torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "step": step,
@@ -147,13 +187,15 @@ def save(path, model, opt, step, args):
 
 
 def main():
+    global SEQ, TOKENS, CKPT
     a = get_args()
+    v = VARIANTS[a.variant]
+    SEQ, TOKENS, CKPT = v["model"]["max_seq_len"], v["tokens"], v["ckpt"]
     torch.set_num_threads(a.threads)
     torch.manual_seed(0)
     from tokenizers import Tokenizer
     tok = Tokenizer.from_file(os.path.join(MODEL_DIR, "tokenizer.json"))
-    cfg = Config(vocab_size=tok.get_vocab_size(), d_model=512, n_layers=10, n_heads=8,
-                 n_experts=8, d_expert=1024, d_shared=512, max_seq_len=SEQ)
+    cfg = Config(vocab_size=tok.get_vocab_size(), **v["model"])
     if not a.no_compile:
         M.enable_compile()
     model = Monkey(cfg)
@@ -171,8 +213,11 @@ def main():
     decay, no_decay = [], []
     for n_, p in model.named_parameters():
         (decay if p.dim() >= 2 and "embed" not in n_ else no_decay).append(p)
-    opt = torch.optim.AdamW([{"params": decay, "weight_decay": 0.1}, {"params": no_decay, "weight_decay": 0.0}],
-                            lr=a.lr, betas=(0.9, 0.95), eps=1e-8, fused=True)
+    groups = [{"params": decay, "weight_decay": 0.1}, {"params": no_decay, "weight_decay": 0.0}]
+    if v["bf16_optim"]:
+        opt = AdamWBF16(groups, lr=a.lr, betas=(0.9, 0.95), eps=1e-8)
+    else:
+        opt = torch.optim.AdamW(groups, lr=a.lr, betas=(0.9, 0.95), eps=1e-8, fused=True)
     step = 0
     if os.path.exists(latest):
         ck = torch.load(latest, map_location="cpu")
@@ -181,12 +226,15 @@ def main():
         step = ck["step"]
         print("resumed from step", step, flush=True)
     elif a.phase == "sft":
-        ck = torch.load(os.path.join(CKPT, "pretrain", "final.pt"), map_location="cpu")
+        src = os.path.join(CKPT, "pretrain", "final.pt")
+        if not os.path.exists(src):  # a slimmed copy without optimiser state
+            src = os.path.join(CKPT, "pretrain", "final_weights.pt")
+        ck = torch.load(src, map_location="cpu")
         model.load_state_dict(ck["model"])
         print("initialised from pretrained model", flush=True)
 
     log = open(os.path.join(ckdir, "log.jsonl"), "a")
-    print(f"phase {a.phase}: {a.total_steps} steps x {B*SEQ} tokens = {a.total_steps*B*SEQ/1e6:.0f}M tokens", flush=True)
+    print(f"variant {a.variant}, phase {a.phase}: {a.total_steps} steps x {B*SEQ} tokens = {a.total_steps*B*SEQ/1e6:.0f}M tokens", flush=True)
     model.train()
     t0 = time.time()
     tok_count = 0

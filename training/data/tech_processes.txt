@@ -1,0 +1,48 @@
+# Step by step explanations of common computer and network processes, written by Claude.
+# Same Q:/A: format as tech_qa.txt. Used to teach the Big model to explain processes in order.
+
+Q: What happens when I visit a website?
+Q: How does a browser load a web page?
+Q: What goes on behind the scenes when I open a website?
+A: Here is what happens, step by step. 1. The browser reads the URL and finds the domain name, such as example.com. 2. It asks a DNS server for the IP address of that name. 3. It opens a TCP connection to the server at that IP address, usually on port 443, and sets up encryption with TLS for HTTPS. 4. It sends an HTTP request, for example GET /index.html. 5. The web server sends back a response with a status code and the HTML of the page. 6. The browser reads the HTML, downloads any images, styles and scripts it needs, and then displays the finished page.
+
+Q: How does a computer start up?
+Q: What happens when you press the power button on a PC?
+Q: Explain the boot process of a computer.
+A: Step by step: 1. Pressing the power button sends electricity to the motherboard and the other parts. 2. The firmware, called the BIOS or UEFI, starts and runs a quick self test of the hardware. 3. The firmware finds the boot drive and starts the boot loader. 4. The boot loader loads the operating system from storage into RAM. 5. The operating system starts its drivers and background services. 6. Finally you see the login screen, and after you sign in, the desktop is ready to use.
+
+Q: How does a device get an IP address on a network?
+Q: How does DHCP work?
+Q: What are the steps of DHCP?
+A: DHCP works in four steps, often called DORA. 1. Discover: the new device broadcasts a message asking for a DHCP server. 2. Offer: the DHCP server, usually in the router, offers an IP address. 3. Request: the device asks to use that address. 4. Acknowledge: the server confirms, and also tells the device the subnet mask, the default gateway and the DNS servers. The device can now talk on the network.
+
+Q: How does a laptop connect to Wi-Fi?
+Q: What happens when I join a wireless network?
+A: Step by step: 1. The laptop scans for nearby networks and lists their names, called SSIDs. 2. You choose a network and type the password. 3. The laptop and the wireless access point check the password and agree on encryption keys. 4. The laptop then uses DHCP to ask the router for an IP address, a gateway and DNS servers. 5. Once it has an address, it can send traffic through the router to the internet.
+
+Q: How does TCP start a connection?
+Q: Explain the TCP handshake step by step.
+A: TCP uses a three way handshake. 1. The client sends a SYN message to the server to ask to connect. 2. The server replies with SYN-ACK to agree. 3. The client sends ACK to confirm. Now both sides are connected and can send data, and TCP numbers every packet so lost ones can be sent again.
+
+Q: How does a DNS lookup work?
+Q: How does my computer find the IP address for a domain name?
+A: Step by step: 1. Your computer first checks its own cache for the name. 2. If it is not there, it asks the DNS resolver it was given, often the router or the ISP's server. 3. If the resolver does not know, it asks a root server, then the server for the top level domain such as .com, then the domain's own name server. 4. The name server replies with the IP address. 5. The resolver passes the answer back to your computer and both of them cache it for next time.
+
+Q: How does an email get from me to someone else?
+Q: What happens when I send an email?
+A: Step by step: 1. Your email program sends the message to your mail server using SMTP. 2. Your mail server uses DNS to find the mail server for the recipient's domain. 3. It sends the message across the internet to that server, again using SMTP. 4. The recipient's server stores the message in their mailbox. 5. The recipient's email app downloads or shows the message using IMAP or POP3.
+
+Q: How does a packet travel across the internet?
+Q: How does data reach a computer on another network?
+A: Step by step: 1. Your computer splits the data into packets and puts the destination IP address on each one. 2. Because the destination is on another network, it sends the packets to its default gateway, the router. 3. Each router reads the destination address and forwards the packet to the next router on the best path. 4. The packets may take different routes, hop by hop, until they reach the destination network. 5. The receiving computer puts the packets back together in the right order.
+
+Q: How does HTTPS keep my data safe?
+Q: What happens when a secure connection is set up?
+A: Step by step: 1. The browser connects to the server and asks for a secure connection. 2. The server sends its certificate, which proves who it is. 3. The browser checks the certificate is valid and signed by a trusted authority. 4. The two sides agree on secret encryption keys using TLS. 5. From then on, all data is encrypted, so nobody in between can read or change it.
+
+Q: What happens when I run a program?
+Q: How does a computer run an app?
+A: Step by step: 1. You open the app, and the operating system finds its file in storage. 2. The operating system loads the program's instructions and data into RAM. 3. The CPU fetches each instruction from memory, decodes it and executes it, over and over. 4. The program uses the operating system to read files, draw on the screen and use the network. 5. When you close it, the operating system frees the memory it was using.
+
+Q: What happens when I print a document over the network?
+A: Step by step: 1. The app sends the document to the operating system's print system. 2. A printer driver turns it into a format the printer understands. 3. The computer sends the job across the network to the printer's IP address. 4. The printer stores the job in a queue and prints the pages in order.

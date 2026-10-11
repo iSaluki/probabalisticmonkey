@@ -1,0 +1,19 @@
+{
+  "name": "probabilistic-monkey-cloudflare",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "deploy:big": "wrangler deploy -c wrangler.big.jsonc",
+    "dev": "wrangler dev",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cloudflare/containers": "0.3.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20260923.1",
+    "typescript": "5.9.3",
+    "wrangler": "4.140.0"
+  }
+}

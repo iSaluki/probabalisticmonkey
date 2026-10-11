@@ -18,7 +18,24 @@ ASSISTANT = "<|assistant|>"
 END = "<|end|>"
 SPECIAL_TOKENS = [EOT, USER, ASSISTANT, END]
 
-for d in (WORK, RAW, CORPUS, TOKENS, CKPT):
+# Model variants. Both share the tokenizer in model/tokenizer.json.
+VARIANTS = {
+    # Probabilistic Monkey: 152.6M parameters, 42.5M active per token
+    "small": {
+        "model": dict(d_model=512, n_layers=10, n_heads=8, n_experts=8, d_expert=1024, d_shared=512, max_seq_len=512),
+        "tokens": TOKENS, "ckpt": CKPT, "model_dir": MODEL_DIR,
+        "micro_batch": 32, "accum": 2, "bf16_optim": False,
+    },
+    # Probabilistic Monkey Big: 516.9M parameters, 74.5M active per token, 1024-token context
+    "big": {
+        "model": dict(d_model=640, n_layers=12, n_heads=10, n_experts=16, d_expert=1280, d_shared=640, max_seq_len=1024),
+        "tokens": os.path.join(WORK, "tokens_big"), "ckpt": os.path.join(WORK, "checkpoints_big"),
+        "model_dir": os.path.join(REPO, "model_big"),
+        "micro_batch": 8, "accum": 4, "bf16_optim": True,
+    },
+}
+
+for d in (WORK, RAW, CORPUS, TOKENS, CKPT, VARIANTS["big"]["tokens"], VARIANTS["big"]["ckpt"]):
     os.makedirs(d, exist_ok=True)
 
 

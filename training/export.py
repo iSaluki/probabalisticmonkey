@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 import torch
 
-from common import CKPT, MODEL_DIR
+from common import MODEL_DIR, VARIANTS
 
 SHARD_BYTES = 45_000_000  # keep every file well under GitHub's 100 MB limit
 
@@ -62,9 +62,15 @@ def write(arrays, cfg, model_dir):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--ckpt", default=os.path.join(CKPT, "sft", "final.pt"))
-    ap.add_argument("--out", default=MODEL_DIR)
+    ap.add_argument("--variant", choices=list(VARIANTS), default="small")
+    ap.add_argument("--ckpt", default=None, help="default: the variant's final chat checkpoint")
+    ap.add_argument("--out", default=None, help="default: the variant's model directory")
     a = ap.parse_args()
+    v = VARIANTS[a.variant]
+    a.ckpt = a.ckpt or os.path.join(v["ckpt"], "sft", "final.pt")
+    a.out = a.out or v["model_dir"]
     ck = torch.load(a.ckpt, map_location="cpu")
     os.makedirs(a.out, exist_ok=True)
     write(convert(ck["model"], ck["config"]), ck["config"], a.out)
+    if os.path.abspath(a.out) != os.path.abspath(MODEL_DIR):  # all variants share one tokenizer
+        shutil.copy(os.path.join(MODEL_DIR, "tokenizer.json"), os.path.join(a.out, "tokenizer.json"))

@@ -1,0 +1,27 @@
+// Probabilistic Monkey (152.6M) on Cloudflare Workers + Containers.
+// Deploy with:  npx wrangler deploy
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "probabilistic-monkey",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+  "containers": [
+    {
+      "class_name": "MonkeyContainer",
+      "image": "./Dockerfile",
+      // build from the repository root so the image can include app/ and model/
+      "image_build_context": "../..",
+      "image_vars": { "MODEL_DIR": "model" },
+      // 1/2 vCPU and 4 GiB: the model needs ~0.8 GB of RAM and decodes ~30 tokens/s
+      "instance_type": "standard-1",
+      "max_instances": 1
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "class_name": "MonkeyContainer", "name": "MONKEY" }]
+  },
+  "exports": {
+    "MonkeyContainer": { "type": "durable-object", "storage": "sqlite" }
+  }
+}
