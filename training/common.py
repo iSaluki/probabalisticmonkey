@@ -31,7 +31,8 @@ VARIANTS = {
         "model": dict(d_model=640, n_layers=12, n_heads=10, n_experts=16, d_expert=1280, d_shared=640, max_seq_len=1024),
         "tokens": os.path.join(WORK, "tokens_gorilla"), "ckpt": os.path.join(WORK, "checkpoints_gorilla"),
         "model_dir": os.path.join(REPO, "model_gorilla"),
-        "micro_batch": 8, "accum": 4, "bf16_optim": True,
+        # 4 x 8 rather than 8 x 4 sequences per step: same batch, ~2 GB less peak memory
+        "micro_batch": 4, "accum": 8, "bf16_optim": True,
     },
 }
 
