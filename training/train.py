@@ -155,6 +155,14 @@ class AdamWBF16(torch.optim.Optimizer):
     def __init__(self, params, lr, betas=(0.9, 0.95), eps=1e-8, weight_decay=0.0):
         super().__init__(params, dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay))
 
+    def load_state_dict(self, state_dict):
+        # torch casts loaded state to the parameters' dtype (fp32); keep the moments in bf16
+        super().load_state_dict(state_dict)
+        for st in self.state.values():
+            for k in ("m", "v"):
+                if k in st:
+                    st[k] = st[k].to(torch.bfloat16)
+
     @torch.no_grad()
     def step(self):
         for g in self.param_groups:
@@ -220,10 +228,12 @@ def main():
         opt = torch.optim.AdamW(groups, lr=a.lr, betas=(0.9, 0.95), eps=1e-8, fused=True)
     step = 0
     if os.path.exists(latest):
-        ck = torch.load(latest, map_location="cpu")
+        # mmap: read tensors from disk as needed instead of holding a second copy in RAM
+        ck = torch.load(latest, map_location="cpu", mmap=True)
         model.load_state_dict(ck["model"])
         opt.load_state_dict(ck["opt"])
         step = ck["step"]
+        del ck
         print("resumed from step", step, flush=True)
     elif a.phase == "sft":
         src = os.path.join(CKPT, "pretrain", "final.pt")
