@@ -37,6 +37,8 @@ def get_args():
     p.add_argument("--decay_frac", type=float, default=0.25, help="WSD: final fraction of steps spent decaying")
     p.add_argument("--eval_every", type=int, default=500)
     p.add_argument("--ckpt_every", type=int, default=250)
+    p.add_argument("--ckpt_minutes", type=float, default=30,
+                   help="also checkpoint when this long has passed since the last save (survives restarts on slow CPUs)")
     p.add_argument("--threads", type=int, default=os.cpu_count())
     p.add_argument("--no_compile", action="store_true")
     a = p.parse_args()
@@ -266,6 +268,7 @@ def main():
     print(f"variant {a.variant}, phase {a.phase}: {a.total_steps} steps x {B*SEQ} tokens = {a.total_steps*B*SEQ/1e6:.0f}M tokens", flush=True)
     model.train()
     t0 = time.time()
+    last_save = time.time()
     tok_count = 0
     while step < a.total_steps:
         lr = lr_at(step, a)
@@ -292,8 +295,9 @@ def main():
             log.write(json.dumps(rec) + "\n")
             log.flush()
             t0, tok_count = time.time(), 0
-        if step % a.ckpt_every == 0 or step == a.total_steps:
+        if step % a.ckpt_every == 0 or step == a.total_steps or time.time() - last_save > a.ckpt_minutes * 60:
             save(latest, model, opt, step, a)
+            last_save = time.time()
         if step % a.eval_every == 0 or step == a.total_steps:
             vl = evaluate(model, data)
             prompt = format_chat([{"role": "user", "content": "What does a router do?"}], add_generation_prompt=True)
