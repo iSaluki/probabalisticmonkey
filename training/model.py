@@ -115,8 +115,13 @@ class MoE(nn.Module):
         return out.view(B, T, C), aux
 
 
+# Precision of the output-layer matmul; train.py switches it to float32 on CPUs
+# without fast bfloat16 support.
+COMPUTE_DTYPE = torch.bfloat16
+
+
 def _lm_loss(x, w, targets, mask):
-    logits = (x.to(torch.bfloat16) @ w.to(torch.bfloat16).T).float()
+    logits = (x.to(COMPUTE_DTYPE) @ w.to(COMPUTE_DTYPE).T).float()
     per = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.reshape(-1), reduction="none")
     m = mask.reshape(-1).float()
     return (per * m).sum() / m.sum().clamp(min=1)

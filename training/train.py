@@ -53,6 +53,19 @@ def get_args():
     return a
 
 
+def cpu_has_fast_bf16():
+    """True on CPUs with AMX or AVX-512 bf16 instructions; elsewhere bf16 is emulated and slow."""
+    try:
+        flags = open("/proc/cpuinfo").read()
+    except OSError:
+        return False
+    return "amx_bf16" in flags or "avx512_bf16" in flags
+
+
+# autocast settings, chosen in main() from the CPU's capabilities
+AMP = dict(device_type="cpu", dtype=torch.bfloat16, enabled=True)
+
+
 def lr_at(step, a):
     if step < a.warmup:
         return a.lr * (step + 1) / a.warmup
@@ -120,7 +133,7 @@ def evaluate(model, data):
     model.eval()
     losses = []
     for x, y, m in data.val_batches():
-        with torch.autocast("cpu", dtype=torch.bfloat16):
+        with torch.autocast(**AMP):
             _, loss, _ = model(x, y, m)
         losses.append(loss.item())
     model.train()
@@ -134,7 +147,7 @@ def sample(model, tok, prompt, n=60):
     end_ids = {tok.token_to_id("<|end|>"), tok.token_to_id("<|endoftext|>")}
     for _ in range(n):
         x = torch.tensor([ids[-SEQ:]])
-        with torch.autocast("cpu", dtype=torch.bfloat16):
+        with torch.autocast(**AMP):
             logits = model(x)[0, -1].float()
         probs = torch.softmax(logits / 0.7, -1)
         nxt = int(torch.multinomial(probs, 1))
@@ -204,6 +217,12 @@ def main():
     from tokenizers import Tokenizer
     tok = Tokenizer.from_file(os.path.join(MODEL_DIR, "tokenizer.json"))
     cfg = Config(vocab_size=tok.get_vocab_size(), **v["model"])
+    # bf16 is several times faster than fp32 on CPUs with AMX / AVX-512 bf16, but several
+    # times slower on CPUs without them. Weights are fp32 either way, so checkpoints work
+    # across both kinds of machine.
+    AMP["enabled"] = cpu_has_fast_bf16()
+    M.COMPUTE_DTYPE = torch.bfloat16 if AMP["enabled"] else torch.float32
+    print("compute precision:", "bfloat16 (autocast)" if AMP["enabled"] else "float32", flush=True)
     if not a.no_compile:
         M.enable_compile()
     model = Monkey(cfg)
@@ -255,7 +274,7 @@ def main():
         loss_acc = aux_acc = 0.0
         for k in range(a.accum):
             x, y, m = data.batch(step * a.accum + k)
-            with torch.autocast("cpu", dtype=torch.bfloat16):
+            with torch.autocast(**AMP):
                 _, loss, aux = model(x, y, m)
             ((loss + cfg.aux_loss_coef * aux) / a.accum).backward()
             loss_acc += loss.item() / a.accum
